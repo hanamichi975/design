@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>창의융합설계연구Ⅰ 연구결과보고서 평가시스템 (단일 파일판)</title>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family:"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo","Noto Sans KR",sans-serif; font-size:14px; color:#222; background:#f5f6f8; }
+a { color:#1a5fb4; text-decoration:none; cursor:pointer; }
+a:hover { text-decoration:underline; }
+.topbar { display:flex; align-items:center; gap:16px; background:#1f3a5f; color:#fff; padding:8px 16px; flex-wrap:wrap; }
+.topbar .brand { font-weight:700; }
+.topbar nav { display:flex; gap:2px; flex-wrap:wrap; flex:1; }
+.topbar nav a { color:#cfe0f5; padding:5px 9px; border-radius:5px; }
+.topbar nav a:hover, .topbar nav a.on { background:#2d4d7a; text-decoration:none; color:#fff; }
+.topbar .user { color:#cfe0f5; display:flex; gap:8px; align-items:center; }
+.container { max-width:1280px; margin:18px auto; padding:0 16px; }
+.wide { max-width:98%; }
+h1 { font-size:20px; margin:8px 0 14px; } h2 { font-size:16px; margin:18px 0 8px; } h3 { font-size:14px; margin:12px 0 6px; }
+.card { background:#fff; border:1px solid #dde2e8; border-radius:8px; padding:14px 16px; margin-bottom:14px; }
+.cards { display:flex; gap:12px; flex-wrap:wrap; }
+.stat { flex:1; min-width:140px; text-align:center; }
+.stat .num { font-size:26px; font-weight:700; color:#1f3a5f; }
+.stat .label { color:#666; font-size:12px; }
+table.list { border-collapse:collapse; width:100%; background:#fff; }
+table.list th, table.list td { border:1px solid #d8dde3; padding:6px 8px; text-align:left; vertical-align:top; }
+table.list th { background:#eef2f7; font-weight:600; white-space:nowrap; }
+table.list tr:hover td { background:#f8fafc; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; white-space:nowrap; }
+.b-gray{background:#e8eaed;color:#555}.b-blue{background:#d8e7fb;color:#1a5fb4}.b-green{background:#d9f0dd;color:#1d7a33}
+.b-red{background:#fbdada;color:#b32020}.b-orange{background:#ffe8cc;color:#b35900}.b-purple{background:#e9defa;color:#6b3fb0}
+#flash { position:fixed; top:10px; right:10px; z-index:99; max-width:420px; }
+.flash { background:#d9f0dd; border:1px solid #a9d8b2; padding:8px 12px; border-radius:6px; margin-bottom:6px; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+.flash-warn { background:#fff3cd; border-color:#ffe08a; }
+input[type=text],input[type=number],input[type=password],input[type=date],select,textarea { padding:6px 8px; border:1px solid #c5ccd4; border-radius:5px; font-family:inherit; font-size:13px; }
+textarea { width:100%; }
+button,.btn { background:#1f3a5f; color:#fff; border:none; padding:7px 14px; border-radius:5px; cursor:pointer; font-family:inherit; font-size:13px; display:inline-block; }
+button:hover,.btn:hover { background:#2d4d7a; text-decoration:none; }
+.btn-sub{background:#6b7785}.btn-warn{background:#b35900}.btn-danger{background:#b32020}
+.btn-sm { padding:3px 9px; font-size:12px; background:#44597a; }
+button:disabled { background:#aab3bf; cursor:not-allowed; }
+.warn-box { background:#fff3cd; border:1px solid #ffe08a; border-radius:6px; padding:10px 12px; margin-bottom:12px; }
+.info-box { background:#e7f1fd; border:1px solid #b9d4f5; border-radius:6px; padding:10px 12px; margin-bottom:12px; }
+.ai-label { background:#6b3fb0; color:#fff; font-size:12px; padding:2px 10px; border-radius:10px; }
+.login-wrap { max-width:400px; margin:80px auto; }
+.login-wrap h1 { text-align:center; }
+.login-wrap form { display:flex; flex-direction:column; gap:10px; }
+.eval-split { display:flex; gap:12px; height:calc(100vh - 130px); }
+.eval-left { flex:1.2; min-width:0; }
+.eval-left iframe { width:100%; height:100%; border:1px solid #c5ccd4; border-radius:6px; background:#fff; }
+.eval-right { flex:1; overflow-y:auto; min-width:420px; }
+.rubric-item { background:#fff; border:1px solid #dde2e8; border-radius:8px; padding:12px 14px; margin-bottom:12px; }
+.rubric-item h3 { margin-top:0; }
+.ai-draft { background:#f7f3fd; border:1px solid #d9c8f2; border-radius:6px; padding:8px 10px; margin:8px 0; font-size:13px; }
+.ai-draft .cite { color:#555; font-size:12px; margin-top:4px; }
+.cite-ok{color:#1d7a33} .cite-bad{color:#b32020}
+.score-row { display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+.score-row select { font-size:15px; font-weight:700; }
+.muted { color:#777; font-size:12px; } .nowrap{white-space:nowrap} .center{text-align:center}
+pre.prewrap { white-space:pre-wrap; font-family:inherit; margin:0; }
+.inline { display:inline-flex; gap:6px; align-items:center; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<div id="flash"></div>
+<div id="top"></div>
+<main id="app" class="container"></main>
+
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════════
+   창의융합설계연구Ⅰ 연구결과보고서 AI 평가 시스템 — 단일 HTML판
+   - 데이터: 이 브라우저의 localStorage(상태) + IndexedDB(PDF 원본)
+   - AI: Anthropic API 직접 호출 (설정에서 API 키 입력)
+   - 여러 평가위원이 각자 PC에서 쓰는 경우: [내보내기] 탭의
+     '내 평가 내보내기' → 관리자가 '평가 가져오기(병합)'로 취합
+   ════════════════════════════════════════════════════════════════ */
+
+const LS_KEY = "evalsys_v1";
+const KEY_KEY = "evalsys_api_key";
+
+/* ── 루브릭(붙임 3) 기본값 — 설정에서 수정 가능 ── */
+const DEFAULT_RUBRIC = [
+  {no:1, name:"문제 정의의 타당성", max:8, desc:"관찰과 해석을 분리하고 이해관계자 검증을 통해 문제를 타당하게 정의하였는가?",
+   levels:[{level:"매우 우수",min:7,max:8},{level:"우수",min:5,max:6},{level:"보통",min:3,max:4},{level:"미흡",min:0,max:2}]},
+  {no:2, name:"다학제적(AOK) 분석의 실질성", max:8, desc:"여러 관점(AOK)의 분석이 형식적 나열이 아니라 실제 분석으로 이어졌는가?",
+   levels:[{level:"매우 우수",min:7,max:8},{level:"우수",min:5,max:6},{level:"보통",min:3,max:4},{level:"미흡",min:0,max:2}]},
+  {no:3, name:"근거의 질", max:7, desc:"출처를 평가하고 반대 의견·편향을 검토하여 근거의 질을 확보하였는가?",
+   levels:[{level:"매우 우수",min:6,max:7},{level:"우수",min:4,max:5},{level:"보통",min:2,max:3},{level:"미흡",min:0,max:1}]},
+  {no:4, name:"해결 방안 설계·실행의 논리성", max:7, desc:"해결 방안의 설계와 실행(또는 파일럿)이 논리적으로 연결되는가?",
+   levels:[{level:"매우 우수",min:6,max:7},{level:"우수",min:4,max:5},{level:"보통",min:2,max:3},{level:"미흡",min:0,max:1}]},
+];
+
+/* ── 24팀 실명단 시드 (창의융합설계연구 팀 및 지도교사.xlsx, 2026-06-11) ── */
+const SEED_TEAMS = [
+ ["건강1","건강","오지연",[["박서연","3406"],["이준호","3213"],["이정석","3112"],["최현서","3215"]]],
+ ["건강2","건강","이소민",[["정우석","3513"],["나호원","3508"],["송준호","3408"]]],
+ ["교육1","교육","정순아",[["최광혁","3413"],["오주호","3410"],["노진우","3604"],["이정찬","3210"]]],
+ ["교육2","교육","이소민",[["박예준","3407"],["김태윤","3405"],["김호재","3203"],["이유찬","3610"]]],
+ ["교육3","교육","정순아",[["이성연","3309"],["백해범","3106"],["이정우","3113"]]],
+ ["기술1","기술","오지연",[["박지환","3509"],["윤상철","3109"],["추민지","3415"],["김한결","3507"]]],
+ ["기술2","기술","김도현",[["이도현","3110"],["이순호","3208"],["김재중","3505"],["김건우","3201"]]],
+ ["기술3","기술","한신실",[["이준우","3310"],["김도윤","3502"],["심명원","3107"],["김태완","3105"]]],
+ ["기술4","기술","홍철희",[["전사랑","3311"],["박다원","3206"],["안재후","3108"],["이재성","3611"]]],
+ ["기술5","기술","곽연우",[["안이솔","3307"],["김화윤","3204"],["김서진","3602"],["김종운","3202"]]],
+ ["기술6","기술","한신실",[["하승욱","3615"],["김주혁","3603"],["오준호","3607"],["이병욱","3111"]]],
+ ["기술7","기술","정선혜",[["박상연","3605"],["박은아","3305"],["김정원","3506"],["조솔리","3412"]]],
+ ["기술8","기술","곽연우",[["김건우","3402"],["김민중","3403"],["윤정찬","3511"],["황승원","3115"]]],
+ ["기술9","기술","이경민",[["김시우","3303"],["서우성","3510"],["조성윤","3614"]]],
+ ["기술10","기술","이병수",[["정윤하","3313"],["이종현","3211"],["김재준","3504"]]],
+ ["사회1","사회","최순주",[["김나우","3501"],["최은수","3414"],["박하윤","3306"],["김기륜","3601"]]],
+ ["사회2","사회","최정호",[["황현빈","3315"],["이승기","3609"],["김하랑","3304"],["박정현","3606"]]],
+ ["사회+언어","사회","이병수",[["이우진","3209"],["이현섭","3214"],["김동현","3103"],["정준호","3114"]]],
+ ["환경1","환경","이경민",[["라예성","3205"],["경승현","3301"],["김서용","3302"],["이준우","3212"]]],
+ ["환경2","환경","홍철희",[["정윤제","3613"],["이성주","3207"],["김지윤","3104"],["고은결","3102"]]],
+ ["환경3","환경","최정호",[["김민재","3503"],["정소연","3312"],["김우현","3404"],["이은섭","3512"]]],
+ ["환경4","환경","최순주",[["조민준","3314"],["이정원","3612"],["최현석","3515"]]],
+ ["환경5","환경","정선혜",[["오애린","3409"],["강지민","3401"],["위진","3308"]]],
+ ["환경6","환경","김도현",[["윤채안","3411"],["최하민","3514"],["윤시훈","3608"]]],
+];
+
+const DEFAULT_EVAL_PROMPT = `당신은 대전과학고등학교 창의융합설계연구Ⅰ 연구결과보고서의 서면평가를 돕는 평가 보조자입니다.
+첨부된 PDF 보고서(그림·표 포함)를 읽고 아래 루브릭에 따라 **초안 평가**를 생성하세요.
+당신의 평가는 초안일 뿐이며 최종 판단은 평가위원(교사)이 합니다.
+
+## 평가 원칙
+- **완성도보다 문제 정의·분석·설계의 논리성 중심**으로 평가합니다.
+- 모든 점수·서술에는 보고서 **원문 인용 근거**를 첨부합니다. 원문에 없는 내용을 지어내지 마세요(환각 금지).
+- 인용 페이지는 본문 하단의 "- n -" 페이지 번호 기준으로 표기합니다(표지는 페이지 번호 없음).
+- 그림·표가 핵심 근거인 경우(설문 차트, 상관행렬, 개념도, 실행 화면 등) 반드시 그 그림·표를 직접 보고 평가에 반영하고, 캡션 번호(예: "그림 3", "[표 1]")로 지칭하세요.
+- 섹션 제목 표기는 보고서마다 다를 수 있으니 제목이 아니라 **내용 기준**으로 판단하세요.
+
+## 루브릭 (붙임 3, 합계 30점 — 각 항목 정수 채점)
+{RUBRIC_TABLE}
+
+## 보고서 구조 ↔ 루브릭 매핑 (집중 검토 섹션)
+| 보고서 섹션 | 주 평가 항목 |
+|---|---|
+| Ⅰ. 프로젝트 개요(주제·배경, 목적) | 항목 1 보조 근거 |
+| Ⅱ-1. 문제 발견 및 검증 | **항목 1 문제 정의의 타당성** |
+| Ⅱ-2. 다학제적 분석 | **항목 2 AOK 분석의 실질성** |
+| Ⅱ-3. 근거 탐색 및 검증 (+ Ⅴ. 참고자료) | **항목 3 근거의 질** |
+| Ⅱ-4. 해결 방안 설계, Ⅱ-5. 실행 및 피드백 (+ Ⅲ. 결과물) | **항목 4 설계·실행의 논리성** |
+| Ⅳ. 성찰 및 제언 | 직접 배점 없음 |
+| (부록) AI 활용 내역 | 항목 5 연구윤리 |
+
+## 항목별 채점 단서
+- **항목 1**: 관찰과 해석을 분리해 서술했는가(예: "'y축이 80에서 시작한다'는 관찰, '과장 의도'는 해석"). 인터뷰 등 **이해관계자 검증**을 거쳤는가.
+- **항목 2**: 여러 관점(AOK) 분석이 형식적 나열에 그치지 않고 **이후 해결책 설계나 데이터 해석의 변경으로 실제 이어졌는가**가 핵심 질문.
+- **항목 3**: 출처의 성격 평가(도서/논문/매체 구분), 반대 견해·편향 검토 여부. 통계 한계의 보수적 서술(예: 음수 R² 인정, 교차검증 불일치 보고)은 가점 단서.
+- **항목 4**: 문제 정의→분석→설계→실행(파일럿)→피드백의 논리적 연결. 결과물(Ⅲ)이 설계 의도와 부합하는가.
+- **항목 5(연구윤리)**: AI 활용 내역 명시 여부를 **본문 전체에서** 탐지하세요(부록·본문 등 위치가 제각각이며 누락 사례 있음). 인용·출처 표기 누락 의심 구간도 점검. '예'는 위반 의심이 있다는 뜻입니다.
+
+## 수준별 앵커 예시 (캘리브레이션 기준)
+{ANCHORS}
+
+점수 인플레이션을 경계하세요. 근거가 약하면 보통 이하를 주저하지 마세요.
+
+## 출력
+반드시 제공된 도구(record_evaluation)를 호출하여 구조화된 JSON으로만 출력하세요.
+- score: 배점 범위 내 정수, 수준 구간과 일치할 것
+- citations: 각 항목 최소 1개, 원문 그대로의 짧은 인용(20~80자)과 페이지("- n -" 형식 또는 "표지"), 그림·표 근거는 figure 필드에 캡션 번호
+- rationale: 판단 근거 서술 / feedback: 학생에게 줄 개선 피드백 2~3문장`;
+
+const DEFAULT_RECORD_PROMPT = `당신은 고등학교 생활기록부 '과목별 세부능력 및 특기사항' 초안 작성을 돕는 보조자입니다.
+아래 자료를 바탕으로 학생 1명의 특기사항 초안을 작성하세요. 초안은 교사가 검토·수정 후 사용합니다.
+
+## 작성 규칙
+- **NEIS 문체(음슴체)**: '~함', '~을 보임', '~하였음' 형태로 끝맺음. 주어(학생 이름) 생략.
+- 학생의 **사고 과정과 역량이 드러나는 관찰 서술** 중심으로 작성.
+- **보고서에 실제로 있는 내용만 사용**: 연구 주제·방법·결과는 보고서 원문 표현에 근거하고, 없는 사실을 지어내지 않음(환각 금지).
+- 학생의 개인 역할·기여 정보가 주어진 경우 이를 중심으로 개인화하고, 성찰 에세이가 주어진 경우 성찰 내용을 반영.
+- 평가 결과에서 강점으로 확인된 항목을 자연스럽게 녹여서 서술.
+- 금지: 평가 서열 표현('최우수', '1등', '상위권'), 타 학생과의 비교, 점수·등급 직접 언급, 과장된 수식어.
+- 분량: 공백 포함 약 {LENGTH}자 (±10%).
+
+## 출력
+반드시 제공된 도구(record_draft)를 호출하여 초안 텍스트만 출력하세요.`;
+
+/* ════════════ 상태 관리 ════════════ */
+let S = null;          // 전체 상태
+let me = null;         // 로그인 사용자 {id,name,isAdmin}
+let view = {name:"dashboard", arg:null};
+
+function defaultState() {
+  const evs = [{id:1, name:"관리자", code:"admin2026", isAdmin:true}];
+  let eid = 2;
+  const advisorIds = {};
+  for (const [,,adv] of SEED_TEAMS) {
+    if (!advisorIds[adv]) { advisorIds[adv] = eid; evs.push({id:eid++, name:adv, code:genCode(), isAdmin:false}); }
+  }
+  for (let i = 13; i <= 24; i++) evs.push({id:eid++, name:`평가위원${String(i).padStart(2,"0")}`, code:genCode(), isAdmin:false});
+  const teams = [], students = [];
+  let tid = 1, sid = 1;
+  for (const [name, field, adv, members] of SEED_TEAMS) {
+    teams.push({id:tid, name, field, topic:"", advisorId:advisorIds[adv]});
+    for (const [sn, no] of members) students.push({id:sid++, teamId:tid, name:sn, no, role:"", reflection:"", course:null, essay:null});
+    tid++;
+  }
+  return {
+    settings: {aggMode:"3인 평균", flagUnit:"항목별", aiModel:"claude-sonnet-4-6",
+               evalStart:"2026-06-15", evalEnd:"2026-06-19", submitDeadline:"2026-06-12 10:00",
+               threshold:20, recordLen:1000, aCut:85, bCut:70},
+    rubric: JSON.parse(JSON.stringify(DEFAULT_RUBRIC)),
+    evaluators: evs, teams, students,
+    reports: [], assignments: [], evaluations: [], aiEvals: [], adjustments: [],
+    anchors: [], records: [], audit: [],
+    prompts: {eval: DEFAULT_EVAL_PROMPT, record: DEFAULT_RECORD_PROMPT},
+    seq: {report:1, ai:1},
+  };
+}
+function genCode() { return Math.random().toString(36).slice(2, 8); }
+function load() {
+  const raw = localStorage.getItem(LS_KEY);
+  if (raw) { try { S = JSON.parse(raw); return; } catch(e) { console.error(e); } }
+  S = defaultState();
+  save();
+}
+function save() { localStorage.setItem(LS_KEY, JSON.stringify(S)); }
+function audit(action, detail="") {
+  S.audit.unshift({ts: now(), actor: me ? me.name : "시스템", action, detail});
+  if (S.audit.length > 1000) S.audit.length = 1000;
+  save();
+}
+
+/* ════════════ IndexedDB (PDF 원본 보관) ════════════ */
+function idb() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open("evalsys_pdfs", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("pdfs");
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function pdfPut(id, buf) {
+  const db = await idb();
+  return new Promise((res, rej) => {
+    const tx = db.transaction("pdfs", "readwrite");
+    tx.objectStore("pdfs").put(buf, id);
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+  });
+}
+async function pdfGet(id) {
+  const db = await idb();
+  return new Promise((res, rej) => {
+    const q = db.transaction("pdfs").objectStore("pdfs").get(id);
+    q.onsuccess = () => res(q.result || null); q.onerror = () => rej(q.error);
+  });
+}
+async function pdfDel(id) {
+  const db = await idb();
+  return new Promise((res) => { const tx = db.transaction("pdfs","readwrite"); tx.objectStore("pdfs").delete(id); tx.oncomplete = res; });
+}
+
+/* ════════════ 공통 유틸 ════════════ */
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const now = () => new Date().toLocaleString("sv-SE").slice(0, 19);
+const today = () => now().slice(0, 10);
+const round1 = x => x == null ? null : Math.round(x * 10) / 10;
+const neisBytes = t => [...(t || "")].reduce((n, c) => n + (c.codePointAt(0) < 128 ? 1 : 3), 0);
+function flash(msg, warn=false) {
+  const d = document.createElement("div");
+  d.className = "flash" + (warn ? " flash-warn" : "");
+  d.textContent = msg;
+  document.getElementById("flash").appendChild(d);
+  setTimeout(() => d.remove(), 6000);
+}
+const team = id => S.teams.find(t => t.id === id);
+const evaluator = id => S.evaluators.find(e => e.id === id);
+const reportOf = teamId => S.reports.find(r => r.teamId === teamId);
+const report = id => S.reports.find(r => r.id === id);
+const student = id => S.students.find(s => s.id === id);
+const myEval = (rid, eid) => S.evaluations.find(v => v.reportId === rid && v.evaluatorId === eid);
+const recOf = sid => S.records.find(r => r.studentId === sid);
+const sortTeams = () => [...S.teams].sort((a,b) => (a.field+a.name).localeCompare(b.field+b.name, "ko"));
+
+function bufToB64(buf) {
+  const u8 = new Uint8Array(buf); let s = "";
+  for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+function b64ToBuf(b64) {
+  const bin = atob(b64); const u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return u8.buffer;
+}
+
+/* ════════════ PDF 추출·파일명 파싱·표지 메타 (FR-1.2) ════════════ */
+function parseFilename(fn) {
+  const m = fn.match(/_([가-힣]{2,5})\(([가-힣]{2,5})\)\.pdf$/i);
+  return m ? {advisor: m[1], rep: m[2]} : {advisor: null, rep: null};
+}
+function matchTeam(advisorName, repStudent) {
+  if (!advisorName) return null;
+  const adv = S.evaluators.find(e => e.name === advisorName);
+  if (!adv) return null;
+  const cands = S.teams.filter(t => t.advisorId === adv.id);
+  if (cands.length === 1 && !repStudent) return cands[0].id;
+  if (repStudent) for (const t of cands)
+    if (S.students.some(s => s.teamId === t.id && s.name === repStudent)) return t.id;
+  return null;
+}
+async function extractPdf(buf) {
+  if (!window.pdfjsLib) throw new Error("pdf.js 로드 실패 — 인터넷 연결을 확인하세요.");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+  const doc = await pdfjsLib.getDocument({
+    data: buf.slice(0),
+    cMapUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/",
+    cMapPacked: true,
+    standardFontDataUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/standard_fonts/",
+  }).promise;
+  const pages = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const tc = await page.getTextContent();
+    // 줄 복원: y좌표 그룹핑
+    const lines = {};
+    for (const it of tc.items) {
+      const y = Math.round(it.transform[5]);
+      (lines[y] = lines[y] || []).push(it);
+    }
+    const text = Object.keys(lines).map(Number).sort((a,b) => b - a)
+      .map(y => lines[y].sort((a,b) => a.transform[4] - b.transform[4]).map(i => i.str).join(" ").trim())
+      .filter(Boolean).join("\n");
+    let label = "";
+    const m = text.trim().match(/-\s*(\d+)\s*-\s*$/) || text.match(/\n-\s*(\d+)\s*-/);
+    if (m) label = `- ${m[1]} -`; else if (i === 1) label = "표지";
+    pages.push({pdfPage: i, label, text});
+  }
+  const fullText = pages.map(p => `[${p.label || "PDF p." + p.pdfPage}]\n${p.text}`).join("\n\n");
+  const err = pages.some(p => p.text.trim()) ? "" : "텍스트가 추출되지 않았습니다(스캔본 PDF일 수 있음). HWP는 PDF 변환본을 사용하세요.";
+  return {fullText, pages, err};
+}
+function coverMeta(pages) {
+  const meta = {titleKr:"", titleEn:"", keywords:"", researchers:"", advisorName:""};
+  if (!pages.length) return meta;
+  const lines = pages[0].text.split("\n").map(l => l.trim()).filter(Boolean);
+  for (const line of lines) {
+    let m = line.match(/(?:관련\s*분야\s*)?키워드\s*[:：]?\s*(.+)/);
+    if (m && !meta.keywords) { meta.keywords = m[1].trim(); continue; }
+    m = line.match(/지도\s*교사\s*[:：]?\s*([가-힣]{2,5})/);
+    if (m && !meta.advisorName) { meta.advisorName = m[1]; continue; }
+    m = line.match(/(?:프로젝트명|연구\s*주제|제목)\s*\(?(?:한글|국문)?\)?\s*[:：]\s*(.+)/);
+    if (m && !meta.titleKr) meta.titleKr = m[1].trim();
+  }
+  for (const line of lines) {
+    const letters = line.replace(/[^A-Za-z]/g, "");
+    if (letters.length >= 15 && letters.length / Math.max(line.length, 1) > 0.5) { meta.titleEn = line; break; }
+  }
+  const stop = new Set(["학년도","년도","학기","학번","학년"]);
+  const found = [];
+  for (const line of lines)
+    for (const m of line.matchAll(/(\d{4})\s*([가-힣]{2,4})/g))
+      if (!stop.has(m[2])) found.push(`${m[1]} ${m[2]}`);
+  if (!found.length) {
+    for (const line of lines)
+      if (/연구자|연구원|팀원|명단/.test(line)) {
+        for (const n of line.match(/[가-힣]{2,4}/g) || [])
+          if (!["연구자","연구원","팀원","명단","지도교사"].includes(n)) found.push(n);
+        break;
+      }
+  }
+  meta.researchers = found.join(", ");
+  if (!meta.titleKr) {
+    const cands = lines.slice(0, 10).filter(l => l.replace(/[^가-힣]/g, "").length >= 8 && !/창의융합|보고서|대전과학|학년도|지도교사/.test(l));
+    if (cands.length) meta.titleKr = cands.reduce((a,b) => a.length >= b.length ? a : b);
+  }
+  return meta;
+}
+function quoteInText(quote, full) {
+  if (!quote || !full) return false;
+  const norm = s => s.replace(/\s+/g, "");
+  const q = norm(quote);
+  if (q.length < 6) return false;
+  const body = norm(full);
+  if (body.includes(q)) return true;
+  const q2 = q.replace(/["'“”‘’…·\[\]()]/g, "");
+  return q2.length >= 6 && (body.includes(q2) || body.includes(q2.slice(0, 20)));
+}
+
+/* ════════════ 집계·수준·플래그 (FR-3.4, FR-3.5) ════════════ */
+const levelOf = (item, score) => score == null ? null : (item.levels.find(lv => score >= lv.min && score <= lv.max) || item.levels.at(-1)).level;
+function levelIdx(item, score) {
+  const name = levelOf(item, score);
+  const i = item.levels.findIndex(lv => lv.level === name);
+  return i < 0 ? item.levels.length - 1 : i;
+}
+function totalLevelIdx(total) {
+  if (total == null) return null;
+  const n = S.rubric[0].levels.length;
+  for (let i = 0; i < n; i++) {
+    const floor = S.rubric.reduce((sum, it) => sum + it.levels[i].min, 0);
+    if (total >= floor) return i;
+  }
+  return n - 1;
+}
+function confirmedEvals(rid) {
+  return S.evaluations.filter(v => v.reportId === rid && v.status === "확정").map(v => {
+    const a = S.assignments.find(x => x.reportId === rid && x.evaluatorId === v.evaluatorId);
+    const total = S.rubric.reduce((sum, it) => sum + (v.scores[it.no] ?? 0), 0);
+    return {evaluatorId: v.evaluatorId, name: evaluator(v.evaluatorId)?.name || "?", role: a?.role || "교차검토",
+            scores: v.scores, total, ethics: v.ethics, confirmedAt: v.confirmedAt};
+  });
+}
+function aggregate(rid) {
+  const evals = confirmedEvals(rid);
+  const nAssigned = S.assignments.filter(a => a.reportId === rid).length;
+  let used = evals;
+  if (S.settings.aggMode === "교차 2인 평균") {
+    const cross = evals.filter(e => e.role === "교차검토");
+    if (cross.length) used = cross;
+  }
+  let avgTotal = null; const avgItems = {};
+  if (used.length) {
+    avgTotal = round1(used.reduce((s, e) => s + e.total, 0) / used.length);
+    for (const it of S.rubric) {
+      const vals = used.map(e => e.scores[it.no]).filter(v => v != null);
+      if (vals.length) avgItems[it.no] = round1(vals.reduce((a,b) => a+b, 0) / vals.length);
+    }
+  }
+  let flagged = false; const flagDetail = [];
+  if (evals.length >= 2) {
+    const u = S.settings.flagUnit;
+    if (u === "항목별" || u === "둘다")
+      for (const it of S.rubric) {
+        const idxs = evals.map(e => e.scores[it.no]).filter(v => v != null).map(v => levelIdx(it, v));
+        if (idxs.length && Math.max(...idxs) - Math.min(...idxs) >= 2) {
+          flagged = true; flagDetail.push(`항목 ${it.no}(${it.name}) 수준차 ${Math.max(...idxs)-Math.min(...idxs)}단계`);
+        }
+      }
+    if (u === "총점" || u === "둘다") {
+      const idxs = evals.map(e => totalLevelIdx(e.total));
+      if (idxs.length && Math.max(...idxs) - Math.min(...idxs) >= 2) {
+        flagged = true; flagDetail.push(`총점 수준차 ${Math.max(...idxs)-Math.min(...idxs)}단계`);
+      }
+    }
+  }
+  const adjusted = S.adjustments.find(a => a.reportId === rid) || null;
+  return {evals, nAssigned, complete: nAssigned >= 3 && evals.length >= nAssigned,
+          avgTotal, avgItems, flagged, flagDetail, adjusted,
+          finalTotal: adjusted ? adjusted.finalTotal : avgTotal,
+          ethicsFlag: evals.some(e => e.ethics === "예")};
+}
+function gradeOf(t100) {
+  if (t100 == null) return null;
+  if (t100 >= +S.settings.aCut) return "A";
+  if (t100 >= +S.settings.bCut) return "B";
+  return "C (Fail)";
+}
+
+/* ════════════ AI 엔진 (단계 2 / FR-4.1) ════════════ */
+const EVAL_TOOL = {
+  name: "record_evaluation", description: "루브릭 평가 결과를 구조화하여 기록한다.",
+  input_schema: {type:"object", properties:{
+    items:{type:"array", items:{type:"object", properties:{
+      no:{type:"integer"}, score:{type:"integer"},
+      level:{type:"string", enum:["매우 우수","우수","보통","미흡"]},
+      rationale:{type:"string"},
+      citations:{type:"array", items:{type:"object", properties:{
+        page:{type:"string"}, quote:{type:"string"}, figure:{type:"string"}}, required:["page","quote"]}},
+      feedback:{type:"string"}},
+      required:["no","score","level","rationale","citations","feedback"]}},
+    ethics:{type:"object", properties:{
+      violation:{type:"string", enum:["예","아니오"]}, ai_usage_stated:{type:"boolean"},
+      evidence:{type:"string"}, suspect_passages:{type:"array", items:{type:"string"}}},
+      required:["violation","ai_usage_stated","evidence"]},
+    overall_comment:{type:"string"}},
+    required:["items","ethics","overall_comment"]},
+};
+const RECORD_TOOL = {
+  name: "record_draft", description: "생활기록부 특기사항 초안을 기록한다.",
+  input_schema: {type:"object", properties:{draft:{type:"string"}}, required:["draft"]},
+};
+const apiKey = () => localStorage.getItem(KEY_KEY) || "";
+
+async function callClaude(body) {
+  if (!apiKey()) throw new Error("API 키가 설정되지 않았습니다. [설정] 탭에서 ANTHROPIC API 키를 입력하세요.");
+  let lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {"x-api-key": apiKey(), "anthropic-version": "2023-06-01",
+                  "anthropic-dangerous-direct-browser-access": "true", "content-type": "application/json"},
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(`API 오류 ${res.status}: ${t.slice(0, 300)}`);
+      }
+      return await res.json();
+    } catch (e) {
+      lastErr = e;
+      if (attempt < 2) await new Promise(r => setTimeout(r, 3000 * (attempt + 1)));
+    }
+  }
+  throw lastErr;
+}
+function toolInput(resp, name) {
+  const block = (resp.content || []).find(b => b.type === "tool_use" && b.name === name);
+  if (!block) throw new Error("구조화 출력(도구 호출)이 응답에 없습니다.");
+  return block.input;
+}
+function rubricTableText() {
+  const lines = ["| # | 평가요소 | 배점 | 평가내용 | 수준 구간 |", "|---|---|---|---|---|"];
+  for (const it of S.rubric)
+    lines.push(`| ${it.no} | ${it.name} | ${it.max} | ${it.desc} | ${it.levels.map(lv => `${lv.level} ${lv.min}~${lv.max}점`).join(" / ")} |`);
+  lines.push("| 5 | 연구윤리 | 예/아니오 | 표절 등의 연구윤리 또는 AI 활용 가이드라인에 위반하는가? | — |");
+  return lines.join("\n");
+}
+function anchorsText() {
+  if (!S.anchors.length) return "(등록된 앵커 예시 없음 — 루브릭 수준 구간을 엄격히 적용할 것)";
+  return S.anchors.map(a => `### ${a.grade} 수준 예시: ${a.title}\n${a.summary}`).join("\n\n");
+}
+function validateAiResult(result, fullText) {
+  const warnings = [];
+  const byNo = Object.fromEntries(S.rubric.map(it => [it.no, it]));
+  const seen = new Set();
+  for (const item of result.items || []) {
+    const it = byNo[item.no];
+    if (!it) { warnings.push(`알 수 없는 항목 번호 ${item.no}`); continue; }
+    seen.add(item.no);
+    if (!Number.isInteger(item.score) || item.score < 0 || item.score > it.max) {
+      const old = item.score;
+      item.score = Math.max(0, Math.min(Math.round(+item.score || 0), it.max));
+      warnings.push(`항목 ${item.no} 점수 ${old} → ${item.score}로 보정(배점 ${it.max}점)`);
+    }
+    for (const c of item.citations || []) {
+      c.verified = quoteInText(c.quote, fullText);
+      if (!c.verified) warnings.push(`항목 ${item.no} 인용 미확인: "${(c.quote || "").slice(0, 30)}…"`);
+    }
+  }
+  const missing = S.rubric.filter(it => !seen.has(it.no)).map(it => it.no);
+  if (missing.length) warnings.push(`누락된 항목: ${missing.join(", ")}`);
+  return warnings;
+}
+async function runAiEvaluation(rid) {
+  const rep = report(rid);
+  const buf = await pdfGet(rid);
+  if (!buf) throw new Error("보고서 PDF가 저장되어 있지 않습니다.");
+  const prompt = S.prompts.eval.replace("{RUBRIC_TABLE}", rubricTableText()).replace("{ANCHORS}", anchorsText());
+  const resp = await callClaude({
+    model: S.settings.aiModel, max_tokens: 8000, temperature: 0,
+    tools: [EVAL_TOOL], tool_choice: {type:"tool", name:"record_evaluation"},
+    messages: [{role:"user", content: [
+      {type:"document", source:{type:"base64", media_type:"application/pdf", data: bufToB64(buf)}},
+      {type:"text", text: prompt}]}],
+  });
+  const result = toolInput(resp, "record_evaluation");
+  result._warnings = validateAiResult(result, rep.fullText || "");
+  result._usage = resp.usage;
+  S.aiEvals.push({id: S.seq.ai++, reportId: rid, createdAt: now(), model: S.settings.aiModel, result});
+  audit("AI 평가 실행", `report=${rid}`);
+  save();
+  return result;
+}
+function latestAi(rid) {
+  const runs = S.aiEvals.filter(a => a.reportId === rid);
+  return runs.length ? runs.at(-1) : null;
+}
+function compareRuns(rid) {
+  const runs = S.aiEvals.filter(a => a.reportId === rid);
+  if (runs.length < 2) return null;
+  const [prev, latest] = [runs.at(-2).result, runs.at(-1).result];
+  return S.rubric.map(it => {
+    const a = (latest.items || []).find(x => x.no === it.no);
+    const b = (prev.items || []).find(x => x.no === it.no);
+    if (!a || !b) return null;
+    const d = Math.abs(levelIdx(it, a.score) - levelIdx(it, b.score));
+    return {no: it.no, name: it.name, latest: a.score, prev: b.score, diff: d, ok: d <= 1};
+  }).filter(Boolean);
+}
+async function runRecordGen(sid, length) {
+  const st = student(sid);
+  const t = team(st.teamId);
+  const rep = reportOf(st.teamId);
+  if (!rep || !(rep.fullText || "").trim()) throw new Error("팀 보고서가 등록되지 않았거나 텍스트가 없습니다.");
+  const agg = aggregate(rep.id);
+  const strengths = S.rubric.filter(it => (agg.avgItems[it.no] ?? 0) >= it.max * 0.7)
+    .map(it => `${it.name}(평균 ${agg.avgItems[it.no]}/${it.max})`).join(", ") || "(확정 평가 없음 또는 강점 항목 없음)";
+  const prompt = S.prompts.record.replace("{LENGTH}", String(length));
+  const text = `${prompt}
+
+## 학생 정보
+- 팀: ${t.name} / 연구주제: ${rep.titleKr || t.topic || "(미입력)"}
+- 학생 개인 역할·기여: ${st.role || "(미입력 — 팀 공통 활동 중심으로만 서술)"}
+- 개인 성찰 에세이: ${st.reflection || "(없음)"}
+- 평가에서 확인된 강점 항목: ${strengths}
+
+## 연구결과보고서 전문 (페이지 라벨 포함)
+${(rep.fullText || "").slice(0, 60000)}`;
+  const resp = await callClaude({
+    model: S.settings.aiModel, max_tokens: 4000, temperature: 0.3,
+    tools: [RECORD_TOOL], tool_choice: {type:"tool", name:"record_draft"},
+    messages: [{role:"user", content: text}],
+  });
+  const draft = toolInput(resp, "record_draft").draft.trim();
+  let rec = recOf(sid);
+  if (!rec) { rec = {studentId: sid, draft:"", final:"", updatedAt:""}; S.records.push(rec); }
+  rec.draft = draft; rec.updatedAt = now();
+  audit("특기사항 생성", `student=${sid}`);
+  save();
+  return draft;
+}
+function similarity(a, b) {
+  const grams = s => { s = (s || "").replace(/\s+/g, ""); const g = new Set(); for (let i = 0; i < s.length - 1; i++) g.add(s.slice(i, i + 2)); return g; };
+  const ga = grams(a), gb = grams(b);
+  if (!ga.size || !gb.size) return 0;
+  let inter = 0; for (const x of ga) if (gb.has(x)) inter++;
+  return inter / (ga.size + gb.size - inter);
+}
+
+/* ════════════ 보고서 등록 (업로드) ════════════ */
+async function importPdfFiles(fileList, forcedTeamId=null) {
+  const msgs = [];
+  for (const file of fileList) {
+    if (!file.name.toLowerCase().endsWith(".pdf")) { msgs.push(`'${file.name}': PDF가 아니어서 건너뜀`); continue; }
+    if (S.reports.some(r => r.filename === file.name)) { msgs.push(`'${file.name}': 이미 등록됨 — 건너뜀`); continue; }
+    const buf = await file.arrayBuffer();
+    const {advisor, rep} = parseFilename(file.name);
+    let teamId = forcedTeamId || matchTeam(advisor, rep);
+    if (teamId && S.reports.some(r => r.teamId === teamId)) {
+      msgs.push(`'${file.name}': 해당 팀 보고서가 이미 있음(상세에서 수정본 재업로드 사용)`); continue;
+    }
+    let fullText = "", pages = [], err = "";
+    try { ({fullText, pages, err} = await extractPdf(buf)); }
+    catch (e) { err = "PDF 추출 실패: " + e.message; }
+    const meta = coverMeta(pages);
+    if (advisor && !meta.advisorName) meta.advisorName = advisor;
+    const id = S.seq.report++;
+    S.reports.push({id, teamId, filename: file.name, uploadedAt: now(), version: 1,
+      plagRate: null, plagChecks: 0, status: "제출",
+      titleKr: meta.titleKr, titleEn: meta.titleEn, keywords: meta.keywords,
+      researchers: meta.researchers, advisorName: meta.advisorName, repStudent: rep || "",
+      fullText, pages, extractError: err});
+    await pdfPut(id, buf);
+    audit("보고서 업로드", file.name);
+    msgs.push(`'${file.name}' 등록 완료${teamId ? ` → ${team(teamId).name}` : " ⚠ 팀 자동 매칭 실패(상세에서 지정)"}${err ? " ⚠ " + err : ""}`);
+  }
+  save();
+  return msgs;
+}
+
+/* ════════════ 배정 (FR-1.4) ════════════ */
+function assignmentWarnings() {
+  const w = [];
+  for (const a of S.assignments) {
+    const r = report(a.reportId); if (!r || !r.teamId) continue;
+    const t = team(r.teamId);
+    if (a.role === "교차검토" && t.advisorId === a.evaluatorId)
+      w.push(`⚠ ${evaluator(a.evaluatorId).name} 교사가 자신이 지도하는 팀(${t.name})의 교차검토로 배정되어 있습니다.`);
+    if (a.role === "지도교사" && t.advisorId !== a.evaluatorId)
+      w.push(`⚠ ${t.name} 팀의 '지도교사' 역할(${evaluator(a.evaluatorId).name})이 실제 지도교사와 다릅니다.`);
+  }
+  const loads = {};
+  for (const a of S.assignments) loads[a.evaluatorId] = (loads[a.evaluatorId] || 0) + 1;
+  for (const [eid, n] of Object.entries(loads))
+    if (n > 3) w.push(`⚠ ${evaluator(+eid).name} 평가위원의 배정이 ${n}건으로 3건을 초과합니다.`);
+  return w;
+}
+function autoAssign() {
+  const loads = {};
+  for (const e of S.evaluators) if (!e.isAdmin) loads[e.id] = 0;
+  for (const a of S.assignments) if (loads[a.evaluatorId] != null) loads[a.evaluatorId]++;
+  let n = 0;
+  for (const r of S.reports.filter(r => r.teamId)) {
+    const t = team(r.teamId);
+    const existing = new Set(S.assignments.filter(a => a.reportId === r.id).map(a => a.evaluatorId));
+    if (t.advisorId && !existing.has(t.advisorId)) {
+      S.assignments.push({reportId: r.id, evaluatorId: t.advisorId, role: "지도교사"});
+      loads[t.advisorId]++; existing.add(t.advisorId); n++;
+    }
+    while (existing.size < 3) {
+      const cands = S.evaluators.filter(e => !e.isAdmin && !existing.has(e.id) && e.id !== t.advisorId);
+      if (!cands.length) break;
+      const pick = cands.reduce((a, b) => loads[a.id] <= loads[b.id] ? a : b);
+      S.assignments.push({reportId: r.id, evaluatorId: pick.id, role: "교차검토"});
+      loads[pick.id]++; existing.add(pick.id); n++;
+    }
+  }
+  audit("자동 배정", `${n}건 추가`); save();
+  return n;
+}
+
+/* ════════════ 렌더링 ════════════ */
+const NAV_ADMIN = [
+  ["dashboard","대시보드"],["teams","팀·학생"],["evaluators","평가위원"],["reports","보고서"],
+  ["assignments","배정"],["aggregate","집계·조정"],["records","특기사항"],["awards","총점·등급"],
+  ["exports","내보내기"],["settings","설정"],
+];
+function go(name, arg=null) { view = {name, arg}; render(); }
+function render() {
+  const top = document.getElementById("top");
+  const app = document.getElementById("app");
+  if (!me) {
+    top.innerHTML = "";
+    app.className = "container";
+    app.innerHTML = vLogin();
+    return;
+  }
+  const navs = me.isAdmin ? NAV_ADMIN : [["myevals","내 평가 목록"]];
+  top.innerHTML = `<header class="topbar">
+    <div class="brand">창의융합설계연구Ⅰ 연구결과보고서 평가시스템</div>
+    <nav>${navs.map(([n, label]) => `<a class="${view.name === n ? "on" : ""}" onclick="go('${n}')">${label}</a>`).join("")}</nav>
+    <div class="user">${esc(me.name)}${me.isAdmin ? " (관리자)" : ""} <button class="btn-sm" onclick="logout()">로그아웃</button></div>
+  </header>`;
+  app.className = "container" + (["evalScreen","aggregate"].includes(view.name) ? " wide" : "");
+  const views = {dashboard:vDashboard, teams:vTeams, evaluators:vEvaluators, reports:vReports,
+    reportDetail:vReportDetail, assignments:vAssignments, aggregate:vAggregate, records:vRecords,
+    recordEdit:vRecordEdit, awards:vAwards, exports:vExports, settings:vSettings, audit:vAudit,
+    myevals:vMyEvals, evalScreen:vEvalScreen};
+  const fn = views[view.name] || (me.isAdmin ? vDashboard : vMyEvals);
+  const out = fn(view.arg);
+  if (typeof out === "string") app.innerHTML = out;
+  if (window._afterRender) { const f = window._afterRender; window._afterRender = null; f(); }
+}
+
+/* ── 로그인 ── */
+function vLogin() {
+  const names = [...S.evaluators].sort((a,b) => (b.isAdmin - a.isAdmin) || a.name.localeCompare(b.name, "ko"));
+  return `<div class="login-wrap card">
+    <h1>창의융합설계연구Ⅰ<br>연구결과보고서 평가시스템</h1>
+    <form onsubmit="doLogin(event)">
+      <label>이름 <select id="li-name" required style="width:100%">
+        <option value="">— 선택 —</option>
+        ${names.map(e => `<option>${esc(e.name)}</option>`).join("")}
+      </select></label>
+      <label>개인코드 <input type="password" id="li-code" required style="width:100%" placeholder="개인코드 입력"></label>
+      <button type="submit">로그인</button>
+    </form>
+    <p class="muted">개인코드를 모르면 담당교사(관리자)에게 문의하세요.<br>
+    본 시스템의 AI 산출물은 모두 초안이며, 확정 책임은 평가위원에게 있습니다.<br>
+    데이터는 이 브라우저(이 PC)에만 저장됩니다 — [내보내기]에서 주기적으로 백업하세요.</p>
+  </div>`;
+}
+window.doLogin = ev => {
+  ev.preventDefault();
+  const name = document.getElementById("li-name").value;
+  const code = document.getElementById("li-code").value.trim();
+  const e = S.evaluators.find(x => x.name === name && x.code === code);
+  if (!e) { flash("이름 또는 개인코드가 올바르지 않습니다.", true); return; }
+  me = {id: e.id, name: e.name, isAdmin: !!e.isAdmin};
+  sessionStorage.setItem("evalsys_login", JSON.stringify(me));
+  audit("로그인");
+  go(me.isAdmin ? "dashboard" : "myevals");
+};
+window.logout = () => { me = null; sessionStorage.removeItem("evalsys_login"); render(); };
+window.go = go;
+
+/* ── 대시보드 ── */
+function statusBadge(r) {
+  if (!r) return `<span class="badge b-gray">미제출</span>`;
+  const map = {"평가가능":"b-green","재제출 대기":"b-orange","미이수":"b-red","제출":"b-gray"};
+  const label = r.status === "제출" ? "표절검사 대기" : r.status === "미이수" ? "미이수(F)" : r.status;
+  return `<span class="badge ${map[r.status] || "b-gray"}">${label}</span>`;
+}
+function vDashboard() {
+  const teams = sortTeams();
+  const rows = teams.map(t => {
+    const r = reportOf(t.id);
+    return {t, r, agg: r ? aggregate(r.id) : null, ai: r ? !!latestAi(r.id) : false};
+  });
+  const nSub = rows.filter(x => x.r).length;
+  const nOk = rows.filter(x => x.r && x.r.status === "평가가능").length;
+  const nDone = rows.filter(x => x.agg && x.agg.complete).length;
+  const nFlag = rows.filter(x => x.agg && x.agg.flagged && !x.agg.adjusted).length;
+  const prog = S.evaluators.filter(e => !e.isAdmin).map(e => {
+    const assigned = S.assignments.filter(a => a.evaluatorId === e.id).length;
+    const confirmed = S.evaluations.filter(v => v.evaluatorId === e.id && v.status === "확정").length;
+    return {e, assigned, confirmed};
+  });
+  const {evalStart, evalEnd} = S.settings;
+  return `<h1>관리자 대시보드</h1>
+  <div class="info-box">평가 기간: <b>${evalStart} ~ ${evalEnd}</b> (오늘: ${today()})
+    ${today() > evalEnd ? " — 평가 기간이 지났습니다." : today() >= evalStart ? " — <b>평가 진행 중</b>" : ""}</div>
+  <div class="cards">
+    <div class="card stat"><div class="num">${nSub}/${teams.length}</div><div class="label">보고서 제출</div></div>
+    <div class="card stat"><div class="num">${nOk}</div><div class="label">평가 대상(표절 통과)</div></div>
+    <div class="card stat"><div class="num">${nDone}</div><div class="label">3인 평가 완료</div></div>
+    <div class="card stat"><div class="num" ${nFlag ? 'style="color:#b32020"' : ""}>${nFlag}</div><div class="label">조정회의 대상(미처리)</div></div>
+  </div>
+  <h2>팀별 상태</h2>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>지도교사</th><th>보고서</th><th>표절률</th><th>AI 초안</th><th>평가 진행</th><th>점수</th><th>플래그</th></tr>
+  ${rows.map(({t, r, agg, ai}) => `<tr>
+    <td>${esc(t.field)}</td><td><b>${esc(t.name)}</b></td>
+    <td>${esc(evaluator(t.advisorId)?.name || "—")}</td>
+    <td>${r ? `<a onclick="go('reportDetail',${r.id})">${esc(r.titleKr || r.filename)}</a> ${statusBadge(r)}` : statusBadge(null)}</td>
+    <td>${r && r.plagRate != null ? r.plagRate + "%" : "—"}</td>
+    <td>${ai ? `<span class="badge b-purple">완료</span>` : "—"}</td>
+    <td>${r ? `${agg.evals.length}/${agg.nAssigned || "미배정"} 확정` : "—"}</td>
+    <td>${agg && agg.finalTotal != null ? `<b>${agg.finalTotal}</b>/30` : "—"}</td>
+    <td>${agg && agg.flagged ? (agg.adjusted ? `<span class="badge b-green">조정 완료</span>` : `<span class="badge b-red">조정회의 대상</span>`) : ""}
+        ${agg && agg.ethicsFlag ? `<span class="badge b-red">윤리 위반 의심</span>` : ""}</td>
+  </tr>`).join("")}</table>
+  <h2>평가위원별 진행률</h2>
+  <table class="list"><tr><th>평가위원</th><th>배정</th><th>확정</th><th>상태</th></tr>
+  ${prog.map(({e, assigned, confirmed}) => `<tr><td>${esc(e.name)}</td><td>${assigned}</td><td>${confirmed}</td>
+    <td>${assigned === 0 ? `<span class="badge b-gray">배정 없음</span>` : confirmed >= assigned ? `<span class="badge b-green">완료</span>` : `<span class="badge b-orange">진행 중 (${assigned - confirmed}건 남음)</span>`}</td></tr>`).join("")}</table>`;
+}
+
+/* ── 팀·학생 ── */
+function vTeams() {
+  const evOpts = sel => S.evaluators.filter(e => !e.isAdmin)
+    .map(e => `<option value="${e.id}" ${e.id === sel ? "selected" : ""}>${esc(e.name)}</option>`).join("");
+  return `<h1>팀·학생 관리</h1>
+  <p class="muted">학번 없는 보고서 명단도 여기서 수동 보정해 등록할 수 있습니다. 역할·기여 정보는 [특기사항]에서 입력합니다.</p>
+  ${sortTeams().map(t => `<div class="card">
+    <div class="inline">
+      <b style="font-size:15px">${esc(t.name)}</b>
+      팀명 <input type="text" id="tn-${t.id}" value="${esc(t.name)}" style="width:90px">
+      분야 <input type="text" id="tf-${t.id}" value="${esc(t.field)}" style="width:70px">
+      연구주제 <input type="text" id="tt-${t.id}" value="${esc(t.topic)}" style="width:280px">
+      지도교사 <select id="ta-${t.id}"><option value="">—</option>${evOpts(t.advisorId)}</select>
+      <button class="btn-sm" onclick="saveTeam(${t.id})">저장</button>
+    </div>
+    <table class="list" style="margin-top:8px"><tr><th style="width:90px">학번</th><th style="width:120px">이름</th><th>역할·기여(요약)</th><th style="width:130px"></th></tr>
+    ${S.students.filter(s => s.teamId === t.id).map(s => `<tr>
+      <td><input type="text" id="sn-${s.id}" value="${esc(s.no)}" style="width:70px"></td>
+      <td><input type="text" id="sname-${s.id}" value="${esc(s.name)}" style="width:100px"></td>
+      <td class="muted">${esc((s.role || "").slice(0, 60))}${(s.role || "").length > 60 ? "…" : ""}</td>
+      <td class="nowrap"><button class="btn-sm" onclick="saveStudent(${s.id})">저장</button>
+      <button class="btn-sm btn-danger" onclick="delStudent(${s.id})">삭제</button></td></tr>`).join("")}
+    <tr><td><input type="text" id="new-no-${t.id}" placeholder="학번" style="width:70px"></td>
+      <td><input type="text" id="new-name-${t.id}" placeholder="이름" style="width:100px"></td>
+      <td class="muted">새 학생 추가</td>
+      <td><button class="btn-sm" onclick="addStudent(${t.id})">추가</button></td></tr>
+    </table></div>`).join("")}`;
+}
+window.saveTeam = id => {
+  const t = team(id);
+  t.name = document.getElementById(`tn-${id}`).value.trim();
+  t.field = document.getElementById(`tf-${id}`).value.trim();
+  t.topic = document.getElementById(`tt-${id}`).value.trim();
+  t.advisorId = +document.getElementById(`ta-${id}`).value || null;
+  audit("팀 수정", t.name); save(); flash("팀 정보를 저장했습니다."); render();
+};
+window.saveStudent = id => {
+  const s = student(id);
+  s.no = document.getElementById(`sn-${id}`).value.trim();
+  s.name = document.getElementById(`sname-${id}`).value.trim();
+  save(); flash("저장했습니다.");
+};
+window.delStudent = id => {
+  const s = student(id);
+  if (!confirm(`${s.name} 학생을 삭제할까요?`)) return;
+  S.students = S.students.filter(x => x.id !== id);
+  S.records = S.records.filter(r => r.studentId !== id);
+  audit("학생 삭제", s.name); save(); render();
+};
+window.addStudent = tid => {
+  const name = document.getElementById(`new-name-${tid}`).value.trim();
+  if (!name) return;
+  const no = document.getElementById(`new-no-${tid}`).value.trim();
+  const id = Math.max(0, ...S.students.map(s => s.id)) + 1;
+  S.students.push({id, teamId: tid, name, no, role:"", reflection:"", course:null, essay:null});
+  audit("학생 추가", name); save(); render();
+};
+
+/* ── 평가위원 ── */
+function vEvaluators() {
+  return `<h1>평가위원 관리</h1>
+  <p class="muted">평가위원은 본인 이름 + 개인코드로 로그인합니다. '평가위원NN' 자리표시 계정은 실명으로 수정하세요.</p>
+  <div class="card"><div class="inline">
+    <input type="text" id="new-ev" placeholder="새 평가위원 이름">
+    <button onclick="addEvaluator()">추가</button></div></div>
+  <table class="list"><tr><th>이름</th><th>개인코드</th><th>지도 팀</th><th>배정</th><th></th></tr>
+  ${S.evaluators.filter(e => !e.isAdmin).map(e => {
+    const nTeams = S.teams.filter(t => t.advisorId === e.id).length;
+    const nAsg = S.assignments.filter(a => a.evaluatorId === e.id).length;
+    return `<tr>
+      <td><input type="text" id="en-${e.id}" value="${esc(e.name)}" style="width:120px"></td>
+      <td><input type="text" id="ec-${e.id}" value="${esc(e.code)}" style="width:110px"></td>
+      <td class="center">${nTeams}</td>
+      <td class="center">${nAsg > 3 ? `<b style="color:#b32020">${nAsg}</b>` : nAsg}</td>
+      <td class="nowrap"><button class="btn-sm" onclick="saveEvaluator(${e.id})">저장</button>
+      <button class="btn-sm btn-danger" onclick="delEvaluator(${e.id})">삭제</button></td></tr>`;
+  }).join("")}</table>`;
+}
+window.addEvaluator = () => {
+  const name = document.getElementById("new-ev").value.trim();
+  if (!name) return;
+  if (S.evaluators.some(e => e.name === name)) { flash("이미 같은 이름이 있습니다.", true); return; }
+  const id = Math.max(...S.evaluators.map(e => e.id)) + 1;
+  S.evaluators.push({id, name, code: genCode(), isAdmin: false});
+  audit("평가위원 추가", name); save(); render();
+};
+window.saveEvaluator = id => {
+  const e = evaluator(id);
+  e.name = document.getElementById(`en-${id}`).value.trim();
+  e.code = document.getElementById(`ec-${id}`).value.trim();
+  audit("평가위원 수정", e.name); save(); flash("저장했습니다.");
+};
+window.delEvaluator = id => {
+  if (S.teams.some(t => t.advisorId === id) || S.assignments.some(a => a.evaluatorId === id)) {
+    flash("지도 팀 또는 배정이 있는 평가위원은 삭제할 수 없습니다.", true); return;
+  }
+  if (!confirm("삭제할까요?")) return;
+  S.evaluators = S.evaluators.filter(e => e.id !== id);
+  audit("평가위원 삭제", `id=${id}`); save(); render();
+};
+
+/* ── 보고서 목록 ── */
+function vReports() {
+  const teamsWithout = sortTeams().filter(t => !reportOf(t.id));
+  return `<h1>보고서 관리</h1>
+  <div class="card">
+    <h2 style="margin-top:0">보고서 등록</h2>
+    <p class="muted">파일명 규칙 <b>…_지도교사명(대표학생명).pdf</b> 를 지키면 팀이 자동 매칭됩니다.
+    여러 파일을 한 번에 선택할 수 있습니다(보고서 폴더에서 전체 선택). HWP는 PDF 변환본을 사용하세요.</p>
+    <div class="inline">
+      <input type="file" id="up-files" accept=".pdf" multiple>
+      팀 직접 지정(선택): <select id="up-team"><option value="">자동 매칭</option>
+        ${teamsWithout.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join("")}</select>
+      <button onclick="doUpload()">등록</button>
+    </div>
+  </div>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>파일명</th><th>제목</th><th>표절률</th><th>상태</th><th>업로드</th><th></th></tr>
+  ${S.reports.map(r => {
+    const t = r.teamId ? team(r.teamId) : null;
+    return `<tr>
+      <td>${esc(t?.field || "—")}</td>
+      <td>${t ? `<b>${esc(t.name)}</b>` : `<span class="badge b-red">팀 미지정</span>`}</td>
+      <td class="muted">${esc(r.filename)}${r.version > 1 ? ` <span class="badge b-blue">v${r.version}</span>` : ""}</td>
+      <td>${esc(r.titleKr || "—")}</td>
+      <td>${r.plagRate != null ? r.plagRate + "%" : `<span class="muted">미입력</span>`}</td>
+      <td>${statusBadge(r)}${r.extractError ? ` <span class="badge b-red" title="${esc(r.extractError)}">추출 오류</span>` : ""}</td>
+      <td class="muted nowrap">${(r.uploadedAt || "").slice(0, 10)}</td>
+      <td class="nowrap"><button class="btn-sm" onclick="go('reportDetail',${r.id})">상세·AI 평가</button></td></tr>`;
+  }).join("") || `<tr><td colspan="8" class="center muted">등록된 보고서가 없습니다.</td></tr>`}</table>
+  <p class="muted">표절률 게이트: 카피킬러 ${S.settings.threshold}% 이상 → 재제출 대기 → 재검사에도 초과면 미이수(Fail). 입력은 보고서 상세에서.</p>`;
+}
+window.doUpload = async () => {
+  const files = document.getElementById("up-files").files;
+  if (!files.length) { flash("PDF 파일을 선택하세요.", true); return; }
+  const forced = +document.getElementById("up-team").value || null;
+  flash("등록 중…");
+  const msgs = await importPdfFiles([...files], forced);
+  msgs.forEach(m => flash(m, m.includes("⚠") || m.includes("건너뜀")));
+  render();
+};
+
+/* ── 보고서 상세 ── */
+function vReportDetail(rid) {
+  const r = report(rid);
+  if (!r) return `<p>보고서를 찾을 수 없습니다.</p>`;
+  const t = r.teamId ? team(r.teamId) : null;
+  const ai = latestAi(rid);
+  const runs = S.aiEvals.filter(a => a.reportId === rid);
+  const cmp = compareRuns(rid);
+  const rubricName = no => S.rubric.find(it => it.no === no)?.name || "";
+  return `<h1>보고서 상세 — ${esc(t?.name || "팀 미지정")}</h1>
+  <p><a onclick="go('reports')">← 보고서 목록</a> ·
+     <a onclick="openPdf(${rid})">PDF 원본 열기</a> ·
+     <a onclick="printSheet(${rid})">평가지 출력</a></p>
+  ${r.extractError ? `<div class="warn-box">⚠ ${esc(r.extractError)}</div>` : ""}
+
+  <div class="card"><h2 style="margin-top:0">메타데이터 (자동 추출 — 수동 보정 가능)</h2>
+    <table class="list">
+      <tr><th style="width:130px">팀 연결</th><td>
+        <select id="rm-team"><option value="">— 미지정 —</option>
+          ${sortTeams().map(x => `<option value="${x.id}" ${x.id === r.teamId ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select>
+        <span class="muted">파일명 인식: 지도교사 ${esc(r.advisorName || "?")} / 대표학생 ${esc(r.repStudent || "?")}</span></td></tr>
+      <tr><th>프로젝트명(한)</th><td><input type="text" id="rm-kr" value="${esc(r.titleKr)}" style="width:100%"></td></tr>
+      <tr><th>프로젝트명(영)</th><td><input type="text" id="rm-en" value="${esc(r.titleEn)}" style="width:100%"></td></tr>
+      <tr><th>키워드</th><td><input type="text" id="rm-kw" value="${esc(r.keywords)}" style="width:100%"></td></tr>
+      <tr><th>연구자 명단</th><td><input type="text" id="rm-rs" value="${esc(r.researchers)}" style="width:100%">
+        <div class="muted">학번 없는 명단도 직접 입력 가능 (예: 3105 김태완, 김주혁)</div></td></tr>
+      <tr><th>지도교사(표지)</th><td><input type="text" id="rm-adv" value="${esc(r.advisorName)}"></td></tr>
+    </table>
+    <button onclick="saveMeta(${rid})">메타데이터 저장</button>
+  </div>
+
+  <div class="card"><h2 style="margin-top:0">표절률 게이트 (카피킬러 결과 입력)</h2>
+    현재 상태: ${statusBadge(r)}
+    ${r.plagRate != null ? ` | 최근 표절률: <b>${r.plagRate}%</b> (${r.plagChecks}차 검사)` : ""}
+    <div class="inline" style="margin-top:8px">
+      표절률(%) <input type="number" id="plag-rate" step="0.1" min="0" max="100" style="width:90px">
+      <button onclick="setPlag(${rid})">입력 (게이트 판정)</button>
+      <span class="muted">${S.settings.threshold}% 미만만 평가 대상</span>
+    </div>
+    ${["재제출 대기","미이수"].includes(r.status) ? `<div class="inline" style="margin-top:8px">
+      수정본 재업로드: <input type="file" id="reup-file" accept=".pdf">
+      <button class="btn-warn" onclick="reupload(${rid})">재업로드 (v${r.version + 1})</button></div>` : ""}
+  </div>
+
+  <div class="card"><h2 style="margin-top:0">AI 초안 평가 <span class="ai-label">AI 생성 초안 — 평가위원 검토 필수</span></h2>
+    ${!apiKey() ? `<div class="warn-box">⚠ API 키가 설정되지 않았습니다. [설정] 탭에서 ANTHROPIC API 키를 입력하세요.</div>` : ""}
+    <div class="inline">
+      <button id="ai-btn" onclick="doAiRun(${rid})" ${!apiKey() ? "disabled" : ""}>
+        ${ai ? "AI 재평가 실행 (일관성 비교용)" : "AI 초안 평가 실행"}</button>
+      <span class="muted">PDF 원본(그림·표 포함)을 Claude에 전송합니다(평가 목적 한정, 학습 미사용). 1~3분 소요. 실행 이력 ${runs.length}회</span>
+    </div>
+    ${cmp ? `<h3>최근 2회 실행 일관성 비교</h3><table class="list">
+      <tr><th>항목</th><th>최신</th><th>이전</th><th>수준 차</th></tr>
+      ${cmp.map(d => `<tr><td>${d.no}. ${esc(d.name)}</td><td>${d.latest}</td><td>${d.prev}</td>
+        <td><span class="badge ${d.ok ? "b-green" : "b-red"}">${d.diff}단계 (${d.ok ? "일관" : "불일치"})</span></td></tr>`).join("")}
+    </table>` : ""}
+    ${ai ? aiResultHtml(ai.result, rubricName) : ""}
+  </div>
+
+  <div class="card"><h2 style="margin-top:0">추출 텍스트 미리보기 (페이지 라벨 보존)</h2>
+    <details><summary>펼치기 (${r.pages.length}페이지)</summary>
+      ${r.pages.map(p => `<h3>${esc(p.label || "PDF p." + p.pdfPage)}</h3>
+        <pre class="prewrap muted">${esc(p.text.slice(0, 2000))}${p.text.length > 2000 ? "… (생략)" : ""}</pre>`).join("")}
+    </details>
+  </div>
+
+  <button class="btn-danger" onclick="delReport(${rid})">보고서 삭제</button>`;
+}
+function aiResultHtml(res, rubricName) {
+  return `${res._warnings?.length ? `<div class="warn-box"><b>검증 경고</b><ul style="margin:4px 0 0 18px">
+      ${res._warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>` : ""}
+    ${(res.items || []).map(item => `<div class="rubric-item">
+      <h3>${item.no}. ${esc(rubricName(item.no))} — <b>${item.score}점</b> <span class="badge b-blue">${esc(item.level)}</span></h3>
+      <div><b>판단 근거:</b> ${esc(item.rationale)}</div>
+      <div class="ai-draft">${(item.citations || []).map(c => `<div class="cite">
+        ${c.verified ? `<span class="cite-ok">✔</span>` : `<span class="cite-bad">✘ 원문 미확인</span>`}
+        [${esc(c.page)}]${c.figure ? ` (${esc(c.figure)})` : ""} “${esc(c.quote)}”</div>`).join("")}</div>
+      <div><b>개선 피드백:</b> ${esc(item.feedback)}</div></div>`).join("")}
+    <div class="rubric-item"><h3>5. 연구윤리 — 위반 의심: <b>${esc(res.ethics?.violation || "?")}</b>
+      ${res.ethics?.violation === "예" ? `<span class="badge b-red">검토 필요</span>` : ""}</h3>
+      <div>AI 활용 내역 명시: ${res.ethics?.ai_usage_stated ? `<span class="badge b-green">확인됨</span>` : `<span class="badge b-red">미확인 — 항목 5 검토 대상</span>`}</div>
+      <div><b>근거:</b> ${esc(res.ethics?.evidence || "")}</div>
+      ${res.ethics?.suspect_passages?.length ? `<div><b>의심 구간:</b><ul style="margin:4px 0 0 18px">
+        ${res.ethics.suspect_passages.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}</div>
+    <div class="info-box"><b>총평:</b> ${esc(res.overall_comment || "")}</div>`;
+}
+window.openPdf = async rid => {
+  const buf = await pdfGet(rid);
+  if (!buf) { flash("PDF 원본이 없습니다.", true); return; }
+  window.open(URL.createObjectURL(new Blob([buf], {type: "application/pdf"})), "_blank");
+};
+window.saveMeta = rid => {
+  const r = report(rid);
+  const newTeam = +document.getElementById("rm-team").value || null;
+  if (newTeam && S.reports.some(x => x.teamId === newTeam && x.id !== rid)) {
+    flash("해당 팀에는 이미 다른 보고서가 연결되어 있습니다.", true); return;
+  }
+  r.teamId = newTeam;
+  r.titleKr = document.getElementById("rm-kr").value.trim();
+  r.titleEn = document.getElementById("rm-en").value.trim();
+  r.keywords = document.getElementById("rm-kw").value.trim();
+  r.researchers = document.getElementById("rm-rs").value.trim();
+  r.advisorName = document.getElementById("rm-adv").value.trim();
+  audit("보고서 메타 수정", r.filename); save(); flash("메타데이터를 저장했습니다."); render();
+};
+window.setPlag = rid => {
+  const r = report(rid);
+  const rate = parseFloat(document.getElementById("plag-rate").value);
+  if (isNaN(rate)) { flash("표절률은 숫자로 입력하세요.", true); return; }
+  r.plagChecks = (r.plagChecks || 0) + 1;
+  r.plagRate = rate;
+  r.status = rate < +S.settings.threshold ? "평가가능" : (r.plagChecks <= 1 ? "재제출 대기" : "미이수");
+  audit("표절률 입력", `${r.filename} ${rate}% (${r.plagChecks}차) → ${r.status}`);
+  save(); flash(`표절률 ${rate}% 입력(${r.plagChecks}차 검사) → 상태: ${r.status}`); render();
+};
+window.reupload = async rid => {
+  const f = document.getElementById("reup-file").files[0];
+  if (!f) { flash("PDF 파일을 선택하세요.", true); return; }
+  const r = report(rid);
+  const buf = await f.arrayBuffer();
+  let fullText = "", pages = [], err = "";
+  try { ({fullText, pages, err} = await extractPdf(buf)); } catch (e) { err = "추출 실패: " + e.message; }
+  Object.assign(r, {filename: f.name, uploadedAt: now(), version: (r.version || 1) + 1, fullText, pages, extractError: err});
+  await pdfPut(rid, buf);
+  audit("수정본 재업로드", `${f.name} v${r.version}`);
+  save(); flash("수정본을 업로드했습니다. 표절률을 다시 입력하면 게이트가 재판정됩니다."); render();
+};
+window.delReport = async rid => {
+  if (!confirm("이 보고서와 모든 평가 데이터를 삭제할까요? 되돌릴 수 없습니다.")) return;
+  S.reports = S.reports.filter(r => r.id !== rid);
+  S.assignments = S.assignments.filter(a => a.reportId !== rid);
+  S.evaluations = S.evaluations.filter(v => v.reportId !== rid);
+  S.aiEvals = S.aiEvals.filter(a => a.reportId !== rid);
+  S.adjustments = S.adjustments.filter(a => a.reportId !== rid);
+  await pdfDel(rid);
+  audit("보고서 삭제", `id=${rid}`); save(); go("reports");
+};
+window.doAiRun = async rid => {
+  const btn = document.getElementById("ai-btn");
+  btn.disabled = true; btn.textContent = "평가 중… (1~3분 소요)";
+  try {
+    const result = await runAiEvaluation(rid);
+    flash(`AI 초안 평가 완료.${result._warnings.length ? ` 경고 ${result._warnings.length}건 — 아래에서 확인하세요.` : ""}`);
+  } catch (e) {
+    flash("AI 평가 실패: " + e.message, true);
+    audit("AI 평가 오류", e.message);
+  }
+  render();
+};
+
+/* ── 배정 ── */
+function vAssignments() {
+  const warnings = assignmentWarnings();
+  const loads = {};
+  for (const a of S.assignments) loads[a.evaluatorId] = (loads[a.evaluatorId] || 0) + 1;
+  const evs = S.evaluators.filter(e => !e.isAdmin);
+  const reps = S.reports.filter(r => r.teamId).sort((a,b) => {
+    const ta = team(a.teamId), tb = team(b.teamId);
+    return (ta.field + ta.name).localeCompare(tb.field + tb.name, "ko");
+  });
+  const opt = (sel, advisorId) => `<option value="">—</option>` + evs.map(e =>
+    `<option value="${e.id}" ${e.id === sel ? "selected" : ""} ${e.id === advisorId ? 'style="color:#b32020"' : ""}>
+     ${esc(e.name)} (${loads[e.id] || 0}건)${e.id === advisorId ? " ⚠지도팀" : ""}</option>`).join("");
+  return `<h1>평가 배정 (보고서 1건당 3인: 지도교사 1 + 교차검토 2)</h1>
+  ${warnings.length ? `<div class="warn-box"><b>배정 제약 경고</b><ul style="margin:4px 0 0 18px">
+    ${warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>` : ""}
+  <div class="card"><div class="inline">
+    <button onclick="doAutoAssign()">자동 배정 추천 실행</button>
+    <span class="muted">지도교사 자동 + 교차검토 균등 배분(자기 지도 팀 제외, 1인당 3건 목표). 기존 배정 유지.</span></div></div>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>상태</th><th>지도교사 (1차)</th><th>교차검토 1</th><th>교차검토 2</th><th></th></tr>
+  ${reps.map(r => {
+    const t = team(r.teamId);
+    const as = S.assignments.filter(a => a.reportId === r.id);
+    const adv = as.find(a => a.role === "지도교사");
+    const cross = as.filter(a => a.role === "교차검토");
+    return `<tr>
+      <td>${esc(t.field)}</td>
+      <td><b>${esc(t.name)}</b><div class="muted">지도: ${esc(evaluator(t.advisorId)?.name || "—")}</div></td>
+      <td>${statusBadge(r)}</td>
+      <td><select id="as-adv-${r.id}">${opt(adv?.evaluatorId ?? t.advisorId, null)}</select></td>
+      <td><select id="as-c1-${r.id}">${opt(cross[0]?.evaluatorId, t.advisorId)}</select></td>
+      <td><select id="as-c2-${r.id}">${opt(cross[1]?.evaluatorId, t.advisorId)}</select></td>
+      <td><button class="btn-sm" onclick="saveAssign(${r.id})">저장</button></td></tr>`;
+  }).join("") || `<tr><td colspan="7" class="center muted">팀에 연결된 보고서가 없습니다.</td></tr>`}</table>
+  <p class="muted">⚠ 표시는 해당 평가위원이 그 팀의 지도교사임을 뜻합니다(교차검토 배정 금지 — 같은 교사의 다른 지도 팀 포함).
+  배정 변경은 확정된 평가가 없는 보고서만 가능합니다.</p>`;
+}
+window.doAutoAssign = () => {
+  if (!confirm("비어 있는 배정을 자동으로 채웁니다. 기존 배정은 유지됩니다. 진행할까요?")) return;
+  const n = autoAssign();
+  flash(`자동 배정 완료: ${n}건 추가.`);
+  assignmentWarnings().forEach(w => flash(w, true));
+  render();
+};
+window.saveAssign = rid => {
+  if (S.evaluations.some(v => v.reportId === rid && v.status === "확정")) {
+    flash("확정된 평가가 있는 보고서의 배정은 변경할 수 없습니다(확정 해제 후 가능).", true); return;
+  }
+  S.assignments = S.assignments.filter(a => a.reportId !== rid);
+  const seen = new Set();
+  for (const [key, role] of [["adv","지도교사"],["c1","교차검토"],["c2","교차검토"]]) {
+    const eid = +document.getElementById(`as-${key}-${rid}`).value;
+    if (!eid) continue;
+    if (seen.has(eid)) { flash("⚠ 동일 평가위원이 중복 선택되어 한 번만 배정되었습니다.", true); continue; }
+    seen.add(eid);
+    S.assignments.push({reportId: rid, evaluatorId: eid, role});
+  }
+  audit("배정 변경", `report=${rid}`); save();
+  assignmentWarnings().forEach(w => flash(w, true));
+  flash("배정을 저장했습니다."); render();
+};
+
+/* ── 집계·조정 ── */
+function vAggregate() {
+  const reps = S.reports.filter(r => r.teamId && ["평가가능","제출"].includes(r.status))
+    .sort((a,b) => { const ta = team(a.teamId), tb = team(b.teamId);
+      return (ta.field + ta.name).localeCompare(tb.field + tb.name, "ko"); });
+  return `<h1>점수 집계 · 등급차 플래그 · 조정회의</h1>
+  <div class="card"><div class="inline">
+    집계 방식: <select id="agg-mode">
+      <option ${S.settings.aggMode === "3인 평균" ? "selected" : ""}>3인 평균</option>
+      <option ${S.settings.aggMode === "교차 2인 평균" ? "selected" : ""}>교차 2인 평균</option></select>
+    등급차 판정 단위: <select id="agg-flag">
+      <option ${S.settings.flagUnit === "항목별" ? "selected" : ""}>항목별</option>
+      <option ${S.settings.flagUnit === "총점" ? "selected" : ""}>총점</option>
+      <option ${S.settings.flagUnit === "둘다" ? "selected" : ""}>둘다</option></select>
+    <button onclick="setAggMode()">변경 (즉시 재계산)</button></div></div>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>진행</th>
+    <th>평가자별 점수 (항목1·2·3·4 / 합계 / 윤리)</th>
+    <th>평균<br>(${esc(S.settings.aggMode)})</th><th>플래그</th><th>조정회의 결과</th><th>최종</th><th>확정 해제</th></tr>
+  ${reps.map(r => {
+    const t = team(r.teamId);
+    const agg = aggregate(r.id);
+    return `<tr ${agg.flagged && !agg.adjusted ? 'style="background:#fff5f5"' : ""}>
+      <td>${esc(t.field)}</td>
+      <td><b>${esc(t.name)}</b><div class="muted">${esc((r.titleKr || "").slice(0, 30))}</div></td>
+      <td class="nowrap">${agg.evals.length}/${agg.nAssigned || "—"} 확정</td>
+      <td>${agg.evals.map(e => `<div>
+        <span class="badge ${e.role === "지도교사" ? "b-blue" : "b-gray"}">${e.role}</span> ${esc(e.name)}:
+        ${S.rubric.map(it => e.scores[it.no] ?? "–").join("·")} / <b>${e.total}</b> / 윤리 ${e.ethics || "–"}</div>`).join("")
+        || `<span class="muted">확정 평가 없음</span>`}</td>
+      <td class="center">${agg.avgTotal != null ? `<b style="font-size:16px">${agg.avgTotal}</b>/30` : "—"}</td>
+      <td>${agg.flagged ? `<span class="badge b-red">조정회의 대상</span>
+        <div class="muted">${agg.flagDetail.map(esc).join("<br>")}</div>` : ""}
+        ${agg.ethicsFlag ? `<span class="badge b-red">윤리 위반 의심</span>` : ""}</td>
+      <td>${agg.adjusted ? `<b>${agg.adjusted.finalTotal}점</b> — ${esc(agg.adjusted.reason)}
+          <div class="muted">${agg.adjusted.decidedAt}</div>
+          <button class="btn-sm btn-danger" onclick="delAdjust(${r.id})">조정 취소</button>`
+        : `<div class="inline">
+          <input type="number" id="adj-t-${r.id}" step="0.1" min="0" max="30" placeholder="최종 점수" style="width:80px">
+          <input type="text" id="adj-r-${r.id}" placeholder="조정 사유" style="width:120px">
+          <button class="btn-sm" onclick="setAdjust(${r.id})">입력</button></div>`}</td>
+      <td class="center">${agg.finalTotal != null ? `<b style="font-size:16px;color:#1d7a33">${agg.finalTotal}</b>` : "—"}</td>
+      <td>${agg.evals.map(e => `<button class="btn-sm btn-warn" onclick="unlockEval(${r.id},${e.evaluatorId})">${esc(e.name)}</button>`).join(" ")}</td>
+    </tr>`;
+  }).join("")}</table>
+  <p class="muted">확정 해제 = 평가위원의 수정 요청을 관리자가 승인하는 절차. 모든 변경은 <a onclick="go('audit')">감사 로그</a>에 기록됩니다.</p>`;
+}
+window.setAggMode = () => {
+  S.settings.aggMode = document.getElementById("agg-mode").value;
+  S.settings.flagUnit = document.getElementById("agg-flag").value;
+  audit("집계 설정 변경", `${S.settings.aggMode} / ${S.settings.flagUnit}`);
+  save(); flash("집계 설정을 변경했습니다. 결과가 재계산되었습니다."); render();
+};
+window.setAdjust = rid => {
+  const t = parseFloat(document.getElementById(`adj-t-${rid}`).value);
+  if (isNaN(t)) { flash("최종 점수는 숫자로 입력하세요.", true); return; }
+  const reason = document.getElementById(`adj-r-${rid}`).value.trim();
+  S.adjustments = S.adjustments.filter(a => a.reportId !== rid);
+  S.adjustments.push({reportId: rid, finalTotal: t, reason, decidedAt: now()});
+  audit("조정회의 결과", `report=${rid} → ${t}점 (${reason})`);
+  save(); flash("조정회의 결과를 저장했습니다."); render();
+};
+window.delAdjust = rid => {
+  S.adjustments = S.adjustments.filter(a => a.reportId !== rid);
+  audit("조정 결과 삭제", `report=${rid}`); save(); render();
+};
+window.unlockEval = (rid, eid) => {
+  const e = evaluator(eid);
+  if (!confirm(`${e.name} 평가위원의 확정을 해제할까요?`)) return;
+  const v = myEval(rid, eid);
+  if (v) { v.status = "작성중"; v.confirmedAt = null; }
+  audit("확정 해제(수정 승인)", `report=${rid} 평가자=${e.name}`);
+  save(); flash(`${e.name} 평가위원의 평가를 수정 가능 상태로 되돌렸습니다.`); render();
+};
+
+/* ── 평가위원: 내 평가 목록 ── */
+function vMyEvals() {
+  const rows = S.assignments.filter(a => a.evaluatorId === me.id).map(a => {
+    const r = report(a.reportId);
+    const t = r?.teamId ? team(r.teamId) : null;
+    return {a, r, t, my: myEval(a.reportId, me.id)};
+  }).filter(x => x.r && x.t)
+    .sort((x, y) => (x.t.field + x.t.name).localeCompare(y.t.field + y.t.name, "ko"));
+  const {evalStart, evalEnd} = S.settings;
+  return `<h1>${esc(me.name)} 평가위원 — 배정된 보고서</h1>
+  <div class="info-box">평가 기간: <b>${evalStart} ~ ${evalEnd}</b> (오늘: ${today()})
+    ${today() >= evalStart && today() <= evalEnd ? " — 평가 진행 중입니다." : today() > evalEnd ? " — ⚠ 평가 기간이 지났습니다." : ""}<br>
+    본인에게 배정된 보고서만 표시됩니다. 평가 확정 전에는 다른 평가자의 점수를 볼 수 없습니다.</div>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>연구 제목</th><th>내 역할</th><th>상태</th><th></th></tr>
+  ${rows.map(({a, r, t, my}) => `<tr>
+    <td>${esc(t.field)}</td><td><b>${esc(t.name)}</b></td><td>${esc(r.titleKr || "—")}</td>
+    <td><span class="badge ${a.role === "지도교사" ? "b-blue" : "b-gray"}">${a.role}</span></td>
+    <td>${r.status !== "평가가능" ? `<span class="badge b-gray">평가 대기 (${r.status})</span>`
+      : my?.status === "확정" ? `<span class="badge b-green">확정 완료</span> <span class="muted">${my.confirmedAt}</span>`
+      : my ? `<span class="badge b-orange">작성 중</span>` : `<span class="badge b-red">미평가</span>`}</td>
+    <td>${r.status === "평가가능" ? `<button class="btn-sm" onclick="go('evalScreen',${r.id})">
+      ${my?.status === "확정" ? "결과 보기" : "평가하기"}</button>` : ""}</td></tr>`).join("")
+    || `<tr><td colspan="6" class="center muted">배정된 보고서가 없습니다. 담당교사에게 문의하세요.</td></tr>`}</table>`;
+}
+
+/* ── 평가 화면 (FR-3.1) ── */
+function vEvalScreen(rid) {
+  const r = report(rid);
+  if (!r) return `<p>보고서를 찾을 수 없습니다.</p>`;
+  const assigned = S.assignments.some(a => a.reportId === rid && a.evaluatorId === me.id);
+  if (!assigned && !me.isAdmin) return `<p>이 보고서에 배정되지 않았습니다.</p>`;
+  const t = team(r.teamId);
+  const my = myEval(rid, me.id) || {scores:{}, comments:{}, ethics:"", ethicsComment:"", status:null};
+  const confirmed = my.status === "확정";
+  const ai = latestAi(rid)?.result || null;
+  const aiItems = Object.fromEntries((ai?.items || []).map(i => [i.no, i]));
+  const others = (confirmed || me.isAdmin) ? confirmedEvals(rid).filter(e => e.evaluatorId !== me.id) : [];
+  window._afterRender = async () => {
+    const buf = await pdfGet(rid);
+    const fr = document.getElementById("pdf-frame");
+    if (fr && buf) fr.src = URL.createObjectURL(new Blob([buf], {type: "application/pdf"}));
+  };
+  return `<h1 style="margin:4px 0 8px">${esc(t.name)} — ${esc(r.titleKr || r.filename)}
+    ${confirmed ? `<span class="badge b-green">확정 완료</span>` : ""}</h1>
+  <div class="eval-split">
+    <div class="eval-left"><iframe id="pdf-frame" title="보고서 PDF"></iframe></div>
+    <div class="eval-right">
+      ${ai ? `<div class="info-box" style="margin-bottom:10px"><span class="ai-label">AI 생성 초안 — 평가위원 검토 필수</span>
+        AI 점수는 참고용 초안입니다. 최종 점수·판정의 책임은 평가위원에게 있습니다.</div>`
+        : `<div class="warn-box">AI 초안이 아직 없습니다. 보고서 원문을 직접 검토하여 평가하세요.</div>`}
+      ${S.rubric.map(it => {
+        const a = aiItems[it.no];
+        const myScore = my.scores[it.no];
+        return `<div class="rubric-item">
+          <h3>${it.no}. ${esc(it.name)} <span class="muted">(배점 ${it.max}점)</span></h3>
+          <div class="muted">${esc(it.desc)}</div>
+          <div class="muted">${it.levels.map(lv => `${lv.level} ${lv.min}~${lv.max}`).join(" / ")}</div>
+          ${a ? `<div class="ai-draft"><b>AI 초안: ${a.score}점 (${esc(a.level)})</b>
+            <div>${esc(a.rationale)}</div>
+            ${(a.citations || []).map(c => `<div class="cite">
+              ${c.verified ? `<span class="cite-ok">✔</span>` : `<span class="cite-bad">✘ 원문 미확인</span>`}
+              [${esc(c.page)}]${c.figure ? ` (${esc(c.figure)})` : ""} “${esc(c.quote)}”</div>`).join("")}
+            <div style="margin-top:4px"><b>피드백:</b> ${esc(a.feedback)}</div></div>` : ""}
+          <div class="score-row"><label>내 점수:
+            <select id="sc-${it.no}" ${confirmed ? "disabled" : ""}>
+              <option value="">—</option>
+              ${Array.from({length: it.max + 1}, (_, i) => it.max - i).map(v =>
+                `<option value="${v}" ${myScore === v ? "selected" : ""}>${v}점</option>`).join("")}
+            </select></label>
+            ${myScore != null ? `<span class="badge b-blue">${levelOf(it, myScore)}</span>` : ""}
+          </div>
+          <textarea id="cm-${it.no}" rows="2" placeholder="코멘트(선택)" ${confirmed ? "readonly" : ""}>${esc(my.comments?.[it.no] || "")}</textarea>
+        </div>`;
+      }).join("")}
+      <div class="rubric-item">
+        <h3>5. 연구윤리 <span class="muted">(예/아니오 — '예'는 위반)</span></h3>
+        <div class="muted">표절 등의 연구윤리 또는 AI 활용 가이드라인에 위반하는가?</div>
+        ${ai?.ethics ? `<div class="ai-draft"><b>AI 제안: ${esc(ai.ethics.violation)}</b>
+          — AI 활용 내역 명시: ${ai.ethics.ai_usage_stated ? "확인됨" : "미확인(검토 대상)"}
+          <div>${esc(ai.ethics.evidence)}</div></div>` : ""}
+        <div class="score-row">
+          <label><input type="radio" name="ethics" value="아니오" ${my.ethics === "아니오" ? "checked" : ""} ${confirmed ? "disabled" : ""}> 아니오 (위반 없음)</label>
+          <label><input type="radio" name="ethics" value="예" ${my.ethics === "예" ? "checked" : ""} ${confirmed ? "disabled" : ""}> 예 (위반 의심 — 조정회의 검토)</label>
+        </div>
+        <textarea id="ethics-cm" rows="2" placeholder="판단 근거(선택)" ${confirmed ? "readonly" : ""}>${esc(my.ethicsComment || "")}</textarea>
+      </div>
+      ${!confirmed ? `<div class="card">
+        <button onclick="saveMyEval(${rid}, false)">임시 저장</button>
+        <button class="btn-warn" onclick="saveMyEval(${rid}, true)">평가 확정 (제출)</button>
+        <div class="muted" style="margin-top:6px">확정하면 관리자 승인 없이 수정할 수 없으며, 이후 타 평가자의 점수가 공개됩니다.</div></div>`
+        : `<div class="info-box">이 평가는 확정되었습니다 (${my.confirmedAt}). 수정이 필요하면 담당교사(관리자)에게 요청하세요.</div>`}
+      ${(confirmed || me.isAdmin) ? `<div class="card"><h3 style="margin-top:0">다른 평가자의 확정 점수</h3>
+        ${others.length ? `<table class="list"><tr><th>평가자</th><th>역할</th>${S.rubric.map(it => `<th>${it.no}</th>`).join("")}<th>합계</th><th>윤리</th></tr>
+          ${others.map(e => `<tr><td>${esc(e.name)}</td><td>${e.role}</td>
+            ${S.rubric.map(it => `<td class="center">${e.scores[it.no] ?? "–"}</td>`).join("")}
+            <td class="center"><b>${e.total}</b></td><td class="center">${e.ethics || "–"}</td></tr>`).join("")}</table>`
+          : `<p class="muted">아직 확정한 다른 평가자가 없습니다.</p>`}</div>` : ""}
+    </div>
+  </div>`;
+}
+window.saveMyEval = (rid, confirm_) => {
+  let v = myEval(rid, me.id);
+  if (v && v.status === "확정") { flash("확정된 평가는 수정할 수 없습니다.", true); return; }
+  if (!v) { v = {reportId: rid, evaluatorId: me.id, status: "작성중", confirmedAt: null, scores:{}, comments:{}, ethics:"", ethicsComment:""}; S.evaluations.push(v); }
+  for (const it of S.rubric) {
+    const raw = document.getElementById(`sc-${it.no}`).value;
+    v.scores[it.no] = raw === "" ? null : Math.max(0, Math.min(+raw, it.max));
+    v.comments[it.no] = document.getElementById(`cm-${it.no}`).value.trim();
+  }
+  v.ethics = document.querySelector('input[name="ethics"]:checked')?.value || "";
+  v.ethicsComment = document.getElementById("ethics-cm").value.trim();
+  if (confirm_) {
+    const missing = S.rubric.filter(it => v.scores[it.no] == null).map(it => it.no);
+    if (missing.length || !["예","아니오"].includes(v.ethics)) {
+      save();
+      const msg = [];
+      if (missing.length) msg.push(`항목 ${missing.join(", ")} 점수 미입력`);
+      if (!["예","아니오"].includes(v.ethics)) msg.push("연구윤리(항목 5) 판정 미선택");
+      flash("확정 불가: " + msg.join(" / "), true); render(); return;
+    }
+    if (!confirm("평가를 확정하면 관리자 승인 없이 수정할 수 없습니다. 확정할까요?")) { save(); return; }
+    v.status = "확정"; v.confirmedAt = now();
+    const total = S.rubric.reduce((s, it) => s + v.scores[it.no], 0);
+    audit("평가 확정", `report=${rid} 합계=${total}`);
+    save(); flash("평가를 확정했습니다. 이제 다른 평가자의 확정 점수를 볼 수 있습니다.");
+  } else {
+    audit("평가 임시저장", `report=${rid}`);
+    save(); flash("임시 저장했습니다.");
+  }
+  render();
+};
+
+/* ── 특기사항 ── */
+function vRecords() {
+  const rows = S.students.map(s => ({s, t: team(s.teamId), rec: recOf(s.id)}))
+    .sort((a, b) => (a.t.field + a.t.name + a.s.no).localeCompare(b.t.field + b.t.name + b.s.no, "ko"));
+  return `<h1>생활기록부 특기사항 (학생별)</h1>
+  <div class="info-box">AI 초안은 반드시 교사가 검토·수정 후 사용하세요. 보고서에는 개인 역할이 드러나지 않으므로,
+  <b>역할·기여 정보를 입력하지 않으면 팀 공통 서술만 생성됩니다.</b></div>
+  <table class="list"><tr><th>분야</th><th>팀</th><th>학번</th><th>이름</th><th>역할 입력</th><th>상태</th><th>분량</th><th></th></tr>
+  ${rows.map(({s, t, rec}) => {
+    const text = (rec?.final || "").trim() || (rec?.draft || "").trim();
+    return `<tr>
+      <td>${esc(t.field)}</td><td>${esc(t.name)}</td><td>${esc(s.no)}</td><td><b>${esc(s.name)}</b></td>
+      <td>${s.role ? `<span class="badge b-green">입력됨</span>` : `<span class="badge b-orange">미입력</span>`}</td>
+      <td>${(rec?.final || "").trim() ? `<span class="badge b-green">확정</span>`
+        : text ? `<span class="badge b-purple">AI 초안</span>` : `<span class="badge b-gray">미작성</span>`}</td>
+      <td class="muted nowrap">${text ? `${text.length}자 / ${neisBytes(text)}byte` : "—"}</td>
+      <td><button class="btn-sm" onclick="go('recordEdit',${s.id})">작성·편집</button></td></tr>`;
+  }).join("")}</table>`;
+}
+function vRecordEdit(sid) {
+  const s = student(sid);
+  const t = team(s.teamId);
+  const rec = recOf(sid) || {draft:"", final:"", updatedAt:""};
+  const rep = reportOf(s.teamId);
+  const myText = (rec.final || "").trim() || (rec.draft || "").trim();
+  const dupWarnings = [];
+  if (myText) for (const tm of S.students.filter(x => x.teamId === s.teamId && x.id !== sid)) {
+    const orec = recOf(tm.id);
+    const other = (orec?.final || "").trim() || (orec?.draft || "").trim();
+    if (other) {
+      const sim = similarity(myText, other);
+      if (sim >= 0.5) dupWarnings.push(`${tm.name} 학생과 중복률 ${Math.round(sim * 100)}% — 개인별 차별화 필요`);
+    }
+  }
+  window._afterRender = () => {
+    const bind = (id, out) => {
+      const el = document.getElementById(id), o = document.getElementById(out);
+      const update = () => { o.textContent = `${el.value.length}자 / NEIS 기준 ${neisBytes(el.value)}byte`; };
+      el.addEventListener("input", update); update();
+    };
+    bind("rec-draft", "rec-draft-cnt"); bind("rec-final", "rec-final-cnt");
+  };
+  return `<h1>특기사항 — ${esc(s.no)} ${esc(s.name)} (${esc(t.name)})</h1>
+  <p><a onclick="go('records')">← 학생 목록</a></p>
+  ${!rep ? `<div class="warn-box">⚠ 이 팀의 보고서가 아직 등록되지 않았습니다.</div>` : ""}
+  ${dupWarnings.map(w => `<div class="warn-box">⚠ ${esc(w)}</div>`).join("")}
+  <div class="card"><h2 style="margin-top:0">개인화 입력</h2>
+    <label><b>팀 내 역할·기여 (필수 입력 권장)</b>
+      ${!s.role ? `<span class="badge b-orange">미입력 — 미입력 시 팀 공통 서술만 생성됨</span>` : ""}
+      <textarea id="rec-role" rows="3" placeholder="예: 설문 문항 설계와 통계 분석 담당, 파이썬으로 상관분석 코드 작성">${esc(s.role)}</textarea></label>
+    <label style="display:block;margin-top:8px">개인 성찰 에세이 (선택 — 붙여넣기)
+      <textarea id="rec-refl" rows="4">${esc(s.reflection)}</textarea></label>
+    <div class="score-row" style="margin-top:10px">
+      분량: <select id="rec-len">
+        <option value="500">약 500자</option>
+        <option value="1000" ${+S.settings.recordLen === 1000 ? "selected" : ""}>약 1,000자 (기본)</option>
+        <option value="1500">약 1,500자</option></select>
+      <button id="rec-gen" onclick="doRecordGen(${sid})" ${!rep || !apiKey() ? "disabled" : ""}>
+        AI 초안 생성</button> <span class="ai-label">초안 — 검토 필수</span>
+      ${!apiKey() ? `<span class="muted">⚠ API 키 미설정([설정] 탭)</span>` : ""}
+    </div></div>
+  <div class="card"><h2 style="margin-top:0">AI 초안 <span class="ai-label">AI 생성 초안 — 교사 검토·수정 필수</span></h2>
+    <textarea id="rec-draft" rows="10">${esc(rec.draft)}</textarea><div class="muted" id="rec-draft-cnt"></div></div>
+  <div class="card"><h2 style="margin-top:0">확정본 (NEIS 입력용)</h2>
+    <textarea id="rec-final" rows="10" placeholder="초안을 검토·수정한 확정본을 여기에 작성하세요.">${esc(rec.final)}</textarea>
+    <div class="muted" id="rec-final-cnt"></div>
+    <button style="margin-top:8px" onclick="saveRecord(${sid})">저장</button></div>
+  ${rec.updatedAt ? `<p class="muted">마지막 저장: ${rec.updatedAt}</p>` : ""}`;
+}
+window.doRecordGen = async sid => {
+  const s = student(sid);
+  s.role = document.getElementById("rec-role").value.trim();
+  s.reflection = document.getElementById("rec-refl").value.trim();
+  save();
+  const btn = document.getElementById("rec-gen");
+  btn.disabled = true; btn.textContent = "생성 중… (약 1분)";
+  try {
+    await runRecordGen(sid, +document.getElementById("rec-len").value);
+    flash("특기사항 초안을 생성했습니다. 반드시 검토·수정 후 확정하세요.");
+  } catch (e) { flash("생성 실패: " + e.message, true); }
+  render();
+};
+window.saveRecord = sid => {
+  const s = student(sid);
+  s.role = document.getElementById("rec-role").value.trim();
+  s.reflection = document.getElementById("rec-refl").value.trim();
+  let rec = recOf(sid);
+  if (!rec) { rec = {studentId: sid, draft:"", final:"", updatedAt:""}; S.records.push(rec); }
+  rec.draft = document.getElementById("rec-draft").value;
+  rec.final = document.getElementById("rec-final").value;
+  rec.updatedAt = now();
+  audit("특기사항 저장", `student=${sid}`);
+  save(); flash("저장했습니다."); render();
+};
+
+/* ── 총점·등급·우수상 ── */
+function vAwards() {
+  const byField = {};
+  for (const t of sortTeams()) {
+    const rep = reportOf(t.id);
+    const score = rep ? aggregate(rep.id).finalTotal : null;
+    (byField[t.field] = byField[t.field] || []).push({t, score, title: rep?.titleKr || t.topic});
+  }
+  for (const f in byField) byField[f].sort((a, b) => (a.score == null) - (b.score == null) || (b.score || 0) - (a.score || 0));
+  const studentRows = S.students.map(s => {
+    const t = team(s.teamId);
+    const rep = reportOf(s.teamId);
+    const rs = rep ? aggregate(rep.id).finalTotal : null;
+    const total = (rs != null && s.course != null && s.essay != null) ? round1(rs + s.course + s.essay) : null;
+    return {s, t, rs, total, grade: total != null ? gradeOf(total) : null};
+  }).sort((a, b) => (a.s.no || "").localeCompare(b.s.no || ""));
+  return `<h1>총점 환산 · 등급 · 우수상 후보 (참고용)</h1>
+  <h2>분야별 보고서 점수 순위 (우수상 후보 추천 참고 — 전체 A등급 중 20% 이내)</h2>
+  <div class="cards">${Object.entries(byField).map(([field, items]) => `
+    <div class="card" style="flex:1;min-width:280px"><h3 style="margin-top:0">${esc(field)}</h3>
+      <table class="list"><tr><th>순위</th><th>팀</th><th>점수</th></tr>
+      ${items.map((it, i) => `<tr ${i === 0 && it.score != null ? 'style="background:#fdf6e0"' : ""}>
+        <td>${i + 1}</td><td><b>${esc(it.t.name)}</b><div class="muted">${esc((it.title || "").slice(0, 24))}</div></td>
+        <td>${it.score != null ? `<b>${it.score}</b>/30` : "—"}</td></tr>`).join("")}</table></div>`).join("")}</div>
+  <h2>학생별 총점(100점 환산) · 등급</h2>
+  <p class="muted">총점 = 과정(40) + 성찰 에세이(30) + 보고서(30). 등급: A ≥ ${S.settings.aCut} / B ${S.settings.bCut}~${S.settings.aCut} 미만 / C(Fail). 과정·에세이는 수기 입력.</p>
+  <table class="list"><tr><th>학번</th><th>이름</th><th>팀</th><th>보고서(30)</th><th>과정(40)</th><th>에세이(30)</th><th>총점</th><th>등급</th></tr>
+  ${studentRows.map(({s, t, rs, total, grade}) => `<tr>
+    <td>${esc(s.no)}</td><td>${esc(s.name)}</td><td>${esc(t.name)}</td>
+    <td class="center">${rs ?? "—"}</td>
+    <td><input type="number" id="course-${s.id}" step="0.1" min="0" max="40" style="width:75px" value="${s.course ?? ""}"></td>
+    <td><input type="number" id="essay-${s.id}" step="0.1" min="0" max="30" style="width:75px" value="${s.essay ?? ""}"></td>
+    <td class="center">${total != null ? `<b>${total}</b>` : "—"}</td>
+    <td class="center">${grade ? `<span class="badge ${grade === "A" ? "b-green" : grade === "B" ? "b-blue" : "b-red"}">${grade}</span>` : "—"}</td></tr>`).join("")}</table>
+  <button style="margin-top:10px" onclick="saveAwards()">과정·에세이 점수 저장 (등급 재계산)</button>`;
+}
+window.saveAwards = () => {
+  for (const s of S.students) {
+    const c = document.getElementById(`course-${s.id}`)?.value;
+    const e = document.getElementById(`essay-${s.id}`)?.value;
+    if (c != null) s.course = c === "" ? null : +c;
+    if (e != null) s.essay = e === "" ? null : +e;
+  }
+  audit("과정·에세이 점수 입력"); save(); flash("저장했습니다."); render();
+};
+
+/* ── 내보내기·백업 ── */
+function vExports() {
+  return `<h1>결과 내보내기 · 백업 · 평가 취합</h1>
+  <div class="card"><h2 style="margin-top:0">결과 내보내기</h2>
+    <p><button onclick="exportScoresXlsx()">📊 점수표 Excel</button>
+       <span class="muted">팀별 평가자 점수·평균·플래그·조정 + 학생별 총점·등급</span></p>
+    <p><button onclick="exportRecordsXlsx()">📝 특기사항 Excel</button>
+       <button class="btn-sub" onclick="exportRecordsTxt()">특기사항 텍스트</button>
+       <span class="muted">확정본 우선, 없으면 초안</span></p>
+    <p class="muted">평가지(붙임 3 서식): 각 보고서 상세 또는 집계 화면의 [평가지 출력] → 인쇄 → PDF로 저장</p></div>
+  <div class="card"><h2 style="margin-top:0">전체 백업 (FR-4.5)</h2>
+    <p><button onclick="exportBackup(false)">💾 백업 내려받기 (데이터만, 권장)</button>
+       <button class="btn-sub" onclick="exportBackup(true)">백업 + PDF 원본 포함 (용량 큼)</button></p>
+    <div class="inline">백업 복원: <input type="file" id="restore-file" accept=".json">
+      <button class="btn-danger" onclick="restoreBackup()">복원 실행</button>
+      <span class="muted">현재 데이터가 백업 시점으로 완전히 대체됩니다.</span></div></div>
+  <div class="card"><h2 style="margin-top:0">평가위원 간 평가 취합 (여러 PC 사용 시)</h2>
+    <p class="muted">이 파일은 PC(브라우저)별로 데이터가 분리됩니다. 평가위원이 각자 PC에서 평가했다면:
+    ① 평가위원이 [내 평가 내보내기] → JSON 파일을 관리자에게 전달 ② 관리자가 [평가 가져오기]로 병합.</p>
+    <p><button class="btn-sub" onclick="exportMyEvals()">내 평가 내보내기 (JSON)</button></p>
+    <div class="inline">평가 가져오기(병합): <input type="file" id="merge-file" accept=".json" multiple>
+      <button onclick="mergeEvals()">병합 실행</button></div></div>
+  <div class="info-box">학생 개인정보·성적 데이터는 이 PC 브라우저에만 저장됩니다. 백업 파일을 외부 서비스에 올리지 마세요.</div>`;
+}
+function downloadFile(name, blob) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+window.exportScoresXlsx = () => {
+  if (!window.XLSX) { flash("Excel 라이브러리 로드 실패 — 인터넷 연결 확인", true); return; }
+  const head = ["팀명","분야","연구주제","지도교사","표절률(%)","상태"];
+  for (let i = 1; i <= 3; i++) head.push(`평가자${i}`, `역할`, ...S.rubric.map(it => `항목${it.no}`), "합계", "윤리");
+  head.push("평균(집계)","플래그","플래그 사유","조정 점수","조정 사유","최종 점수");
+  const rows = [head];
+  for (const t of sortTeams()) {
+    const rep = reportOf(t.id);
+    const row = [t.name, t.field, rep?.titleKr || t.topic, evaluator(t.advisorId)?.name || ""];
+    if (!rep) { rows.push([...row, "", "미제출"]); continue; }
+    row.push(rep.plagRate, rep.status);
+    const agg = aggregate(rep.id);
+    const evs = [...agg.evals].sort((a, b) => (a.role === "지도교사" ? 0 : 1) - (b.role === "지도교사" ? 0 : 1));
+    for (let i = 0; i < 3; i++) {
+      const e = evs[i];
+      if (e) row.push(e.name, e.role, ...S.rubric.map(it => e.scores[it.no]), e.total, e.ethics);
+      else row.push("", "", ...S.rubric.map(() => ""), "", "");
+    }
+    row.push(agg.avgTotal, agg.flagged ? "조정회의 대상" : "", agg.flagDetail.join("; "),
+      agg.adjusted?.finalTotal ?? "", agg.adjusted?.reason ?? "", agg.finalTotal);
+    rows.push(row);
+  }
+  const rows2 = [["학번","이름","팀명","분야","보고서(30)","과정(40)","에세이(30)","총점(100)","등급(참고)"]];
+  for (const s of [...S.students].sort((a, b) => (a.no || "").localeCompare(b.no || ""))) {
+    const t = team(s.teamId);
+    const rep = reportOf(s.teamId);
+    const rs = rep ? aggregate(rep.id).finalTotal : null;
+    const total = (rs != null && s.course != null && s.essay != null) ? round1(rs + s.course + s.essay) : null;
+    rows2.push([s.no, s.name, t.name, t.field, rs, s.course, s.essay, total, total != null ? gradeOf(total) : ""]);
+  }
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), "팀별 점수");
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows2), "학생별 점수");
+  XLSX.writeFile(wb, "창의융합설계연구_점수표.xlsx");
+};
+window.exportRecordsXlsx = () => {
+  if (!window.XLSX) { flash("Excel 라이브러리 로드 실패", true); return; }
+  const rows = [["학번","이름","팀명","특기사항(확정본 우선)","글자수","byte(NEIS)","상태"]];
+  for (const s of [...S.students].sort((a, b) => (a.no || "").localeCompare(b.no || ""))) {
+    const rec = recOf(s.id);
+    const text = (rec?.final || "").trim() || (rec?.draft || "").trim();
+    rows.push([s.no, s.name, team(s.teamId).name, text, text.length, neisBytes(text),
+      (rec?.final || "").trim() ? "확정" : text ? "초안" : "미작성"]);
+  }
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), "특기사항");
+  XLSX.writeFile(wb, "창의융합설계연구_특기사항.xlsx");
+};
+window.exportRecordsTxt = () => {
+  const parts = [];
+  for (const s of [...S.students].sort((a, b) => (a.no || "").localeCompare(b.no || ""))) {
+    const rec = recOf(s.id);
+    const text = (rec?.final || "").trim() || (rec?.draft || "").trim();
+    parts.push(`[${s.no} ${s.name} / ${team(s.teamId).name}]\n${text || "(미작성)"}\n`);
+  }
+  downloadFile("창의융합설계연구_특기사항.txt", new Blob(["﻿" + parts.join("\n")], {type: "text/plain;charset=utf-8"}));
+};
+window.exportBackup = async withPdf => {
+  const data = {type: "backup", savedAt: now(), state: S};
+  if (withPdf) {
+    data.pdfs = {};
+    for (const r of S.reports) {
+      const buf = await pdfGet(r.id);
+      if (buf) data.pdfs[r.id] = bufToB64(buf);
+    }
+  }
+  audit("백업 내보내기", withPdf ? "PDF 포함" : "데이터만");
+  downloadFile(`평가시스템_백업_${now().replace(/[: ]/g, "").replace(/-/g, "")}.json`,
+    new Blob([JSON.stringify(data)], {type: "application/json"}));
+};
+window.restoreBackup = async () => {
+  const f = document.getElementById("restore-file").files[0];
+  if (!f) { flash("백업 파일을 선택하세요.", true); return; }
+  if (!confirm("현재 데이터가 백업 시점으로 완전히 대체됩니다. 진행할까요?")) return;
+  try {
+    const data = JSON.parse(await f.text());
+    if (data.type !== "backup" || !data.state) throw new Error("올바른 백업 파일이 아닙니다.");
+    S = data.state;
+    if (data.pdfs) for (const [id, b64] of Object.entries(data.pdfs)) await pdfPut(+id, b64ToBuf(b64));
+    save(); flash("백업을 복원했습니다."); render();
+  } catch (e) { flash("복원 실패: " + e.message, true); }
+};
+window.exportMyEvals = () => {
+  const mine = S.evaluations.filter(v => v.evaluatorId === me.id);
+  if (!mine.length) { flash("내 평가가 없습니다.", true); return; }
+  const data = {type: "evaluations", evaluatorName: me.name, exportedAt: now(),
+    evaluations: mine.map(v => ({...v, reportFilename: report(v.reportId)?.filename}))};
+  downloadFile(`평가_${me.name}_${today()}.json`, new Blob([JSON.stringify(data)], {type: "application/json"}));
+};
+window.mergeEvals = async () => {
+  const files = document.getElementById("merge-file").files;
+  if (!files.length) { flash("JSON 파일을 선택하세요.", true); return; }
+  let n = 0;
+  for (const f of files) {
+    try {
+      const data = JSON.parse(await f.text());
+      if (data.type !== "evaluations") throw new Error("평가 내보내기 파일이 아님");
+      const ev = S.evaluators.find(e => e.name === data.evaluatorName);
+      if (!ev) { flash(`'${data.evaluatorName}' 평가위원이 명단에 없습니다.`, true); continue; }
+      for (const v of data.evaluations) {
+        // 파일명으로 보고서 재매칭 (PC 간 id가 다를 수 있음)
+        const rep = S.reports.find(r => r.filename === v.reportFilename) || report(v.reportId);
+        if (!rep) continue;
+        S.evaluations = S.evaluations.filter(x => !(x.reportId === rep.id && x.evaluatorId === ev.id));
+        S.evaluations.push({...v, reportId: rep.id, evaluatorId: ev.id});
+        n++;
+      }
+      audit("평가 병합", `${data.evaluatorName} ${data.evaluations.length}건`);
+    } catch (e) { flash(`'${f.name}' 병합 실패: ${e.message}`, true); }
+  }
+  save(); flash(`평가 ${n}건을 병합했습니다.`); render();
+};
+
+/* ── 평가지 출력 (붙임 3 서식) ── */
+window.printSheet = rid => {
+  const r = report(rid);
+  const t = team(r.teamId);
+  const agg = aggregate(rid);
+  const students = S.students.filter(s => s.teamId === r.teamId);
+  const pad = arr => { const out = [...arr]; while (out.length < 3) out.push(null); return out; };
+  const evs = pad([...agg.evals].sort((a, b) => (a.role === "지도교사" ? 0 : 1) - (b.role === "지도교사" ? 0 : 1)));
+  const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>평가지 — ${esc(t.name)}</title>
+  <style>body{font-family:"Malgun Gothic",sans-serif;font-size:13px;margin:30px}
+  h1{text-align:center;font-size:19px} table{border-collapse:collapse;width:100%;margin:10px 0}
+  th,td{border:1px solid #333;padding:6px 8px} th{background:#efefef} .c{text-align:center}
+  @media print{button{display:none}}</style></head><body>
+  <button onclick="window.print()">🖨 인쇄 / PDF로 저장</button>
+  <h1>창의융합설계연구Ⅰ 연구결과보고서 서면평가 기준표 (붙임 3)</h1>
+  <table><tr><th style="width:90px">평가번호</th><td>${r.id}</td><th style="width:70px">분야</th><td>${esc(t.field)}</td>
+    <th style="width:70px">팀명</th><td>${esc(t.name)}</td></tr>
+  <tr><th>프로젝트명</th><td colspan="5">${esc(r.titleKr)}</td></tr>
+  <tr><th>연구자</th><td colspan="3">${students.map(s => `${esc(s.no)} ${esc(s.name)}`).join(", ")}</td>
+    <th>지도교사</th><td>${esc(evaluator(t.advisorId)?.name || "")}</td></tr></table>
+  <table><tr><th style="width:30px">#</th><th>평가요소</th><th style="width:50px">배점</th>
+    ${evs.map((e, i) => `<th>${e ? esc(e.name) + "<br><span style='font-weight:400'>(" + e.role + ")</span>" : "평가자" + (i + 1)}</th>`).join("")}
+    <th style="width:60px">평균</th></tr>
+  ${S.rubric.map(it => `<tr><td class="c">${it.no}</td>
+    <td>${esc(it.name)}<br><span style="font-size:11px;color:#555">${esc(it.desc)}</span></td>
+    <td class="c">${it.max}</td>
+    ${evs.map(e => `<td class="c">${e ? e.scores[it.no] ?? "" : ""}</td>`).join("")}
+    <td class="c">${agg.avgItems[it.no] ?? ""}</td></tr>`).join("")}
+  <tr><td class="c">5</td><td>연구윤리<br><span style="font-size:11px;color:#555">표절 등의 연구윤리 또는 AI 활용 가이드라인에 위반하는가?</span></td>
+    <td class="c">예/아니오</td>${evs.map(e => `<td class="c">${e ? e.ethics || "" : ""}</td>`).join("")}<td></td></tr>
+  <tr><th colspan="2">합계</th><th class="c">30</th>
+    ${evs.map(e => `<td class="c" style="font-weight:700">${e ? e.total : ""}</td>`).join("")}
+    <td class="c" style="font-weight:700">${agg.avgTotal ?? ""}</td></tr></table>
+  ${agg.flagged ? `<table><tr><th style="width:130px">조정회의 대상</th><td>${agg.flagDetail.map(esc).join(" / ")}</td></tr>
+    ${agg.adjusted ? `<tr><th>조정 결과</th><td>최종 ${agg.adjusted.finalTotal}점 — ${esc(agg.adjusted.reason)} (${agg.adjusted.decidedAt.slice(0, 10)})</td></tr>` : ""}</table>` : ""}
+  <table><tr><th style="width:100px">평가일</th><td>${today()}</td>
+    <th style="width:100px">최종 점수</th><td style="font-weight:700">${agg.finalTotal ?? ""} / 30</td></tr>
+  ${evs.map((e, i) => `<tr style="height:46px"><th>${e ? e.role : "평가자"}</th>
+    <td colspan="3">${e ? esc(e.name) : ""} (서명: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</td></tr>`).join("")}</table>
+  </body></html>`;
+  const w = window.open("", "_blank");
+  w.document.write(html);
+  w.document.close();
+};
+
+/* ── 설정 ── */
+function vSettings() {
+  return `<h1>설정</h1>
+  <div class="card"><h2 style="margin-top:0">ANTHROPIC API 키 (AI 기능)</h2>
+    상태: ${apiKey() ? `<span class="badge b-green">설정됨</span>` : `<span class="badge b-red">미설정</span>`}
+    <div class="inline" style="margin-top:8px">
+      <input type="password" id="set-key" placeholder="sk-ant-..." style="width:340px" value="${esc(apiKey())}">
+      <button onclick="saveKey()">저장</button>
+      <button class="btn-sub" onclick="clearKey()">삭제</button></div>
+    <p class="muted">키는 이 브라우저(localStorage)에만 저장되며 외부로 전송되지 않습니다(AI 호출 시 Anthropic API에만 사용).
+    공용 PC에서는 사용 후 키를 삭제하세요. Anthropic API는 입력 데이터를 모델 학습에 사용하지 않습니다(상업용 약관).</p></div>
+  <div class="card"><h2 style="margin-top:0">일반 설정</h2>
+    <table class="list">
+      <tr><th style="width:220px">집계 방식 (§2.2 미결 1)</th><td><select id="set-agg">
+        <option ${S.settings.aggMode === "3인 평균" ? "selected" : ""}>3인 평균</option>
+        <option ${S.settings.aggMode === "교차 2인 평균" ? "selected" : ""}>교차 2인 평균</option></select></td></tr>
+      <tr><th>등급차 판정 단위 (미결 2)</th><td><select id="set-flag">
+        <option ${S.settings.flagUnit === "항목별" ? "selected" : ""}>항목별</option>
+        <option ${S.settings.flagUnit === "총점" ? "selected" : ""}>총점</option>
+        <option ${S.settings.flagUnit === "둘다" ? "selected" : ""}>둘다</option></select></td></tr>
+      <tr><th>AI 모델</th><td><input type="text" id="set-model" value="${esc(S.settings.aiModel)}" style="width:280px">
+        <div class="muted">예: claude-sonnet-4-6 (권장), claude-opus-4-8 (고품질·고비용)</div></td></tr>
+      <tr><th>제출 마감</th><td><input type="text" id="set-deadline" value="${esc(S.settings.submitDeadline)}"></td></tr>
+      <tr><th>평가 기간</th><td><input type="date" id="set-start" value="${S.settings.evalStart}"> ~
+        <input type="date" id="set-end" value="${S.settings.evalEnd}"></td></tr>
+      <tr><th>표절률 기준(%)</th><td><input type="number" id="set-th" value="${S.settings.threshold}" step="0.1" style="width:80px"></td></tr>
+      <tr><th>특기사항 기본 분량(자)</th><td><input type="number" id="set-len" value="${S.settings.recordLen}" style="width:80px"></td></tr>
+      <tr><th>등급 경계 (A / B)</th><td>A ≥ <input type="number" id="set-a" value="${S.settings.aCut}" step="0.1" style="width:70px">
+        , B ≥ <input type="number" id="set-b" value="${S.settings.bCut}" step="0.1" style="width:70px"></td></tr>
+      <tr><th>관리자 코드 변경</th><td><input type="text" id="set-admin" placeholder="변경 시에만 입력"></td></tr>
+    </table>
+    <button onclick="saveSettings()">일반 설정 저장</button></div>
+  <div class="card"><h2 style="margin-top:0">앵커 예시 등록 (AI 캘리브레이션, FR-2.4)</h2>
+    <p class="muted">A·B·C 수준별 앵커 보고서의 특징 요약을 등록하면 AI 평가 프롬프트에 포함되어 점수 인플레이션을 억제합니다.</p>
+    <table class="list"><tr><th>수준</th><th>제목</th><th>요약</th><th></th></tr>
+    ${S.anchors.map((a, i) => `<tr><td>${esc(a.grade)}</td><td>${esc(a.title)}</td>
+      <td><pre class="prewrap">${esc(a.summary.slice(0, 300))}</pre></td>
+      <td><button class="btn-sm btn-danger" onclick="delAnchor(${i})">삭제</button></td></tr>`).join("")}</table>
+    <div style="margin-top:8px">
+      <select id="anchor-grade"><option>A</option><option>B</option><option>C</option></select>
+      <input type="text" id="anchor-title" placeholder="앵커 보고서 제목" style="width:280px">
+      <textarea id="anchor-summary" rows="4" placeholder="이 수준의 특징 요약"></textarea>
+      <button style="margin-top:6px" onclick="addAnchor()">앵커 등록</button></div></div>
+  <div class="card"><h2 style="margin-top:0">루브릭 (데이터로 정의 — 연도별 교체 가능)</h2>
+    <textarea id="set-rubric" rows="14" style="font-family:monospace">${esc(JSON.stringify(S.rubric, null, 2))}</textarea>
+    <button style="margin-top:6px" onclick="saveRubric()">루브릭 저장</button></div>
+  <div class="card"><h2 style="margin-top:0">AI 프롬프트 (교사 수정 가능)</h2>
+    <h3>평가 프롬프트</h3>
+    <textarea id="set-p-eval" rows="12" style="font-family:monospace">${esc(S.prompts.eval)}</textarea>
+    <h3>특기사항 프롬프트</h3>
+    <textarea id="set-p-rec" rows="10" style="font-family:monospace">${esc(S.prompts.record)}</textarea>
+    <button style="margin-top:6px" onclick="savePrompts()">프롬프트 저장</button></div>
+  <div class="card"><h2 style="margin-top:0">초기화</h2>
+    <button class="btn-danger" onclick="resetAll()">전체 데이터 초기화 (시드 상태로)</button>
+    <span class="muted">모든 보고서·평가·특기사항이 삭제됩니다. 먼저 백업하세요.</span></div>
+  <p><a onclick="go('audit')">감사 로그(점수 변경 이력) 보기 →</a></p>`;
+}
+window.saveKey = () => { localStorage.setItem(KEY_KEY, document.getElementById("set-key").value.trim()); flash("API 키를 저장했습니다."); render(); };
+window.clearKey = () => { localStorage.removeItem(KEY_KEY); flash("API 키를 삭제했습니다."); render(); };
+window.saveSettings = () => {
+  const s = S.settings;
+  s.aggMode = document.getElementById("set-agg").value;
+  s.flagUnit = document.getElementById("set-flag").value;
+  s.aiModel = document.getElementById("set-model").value.trim();
+  s.submitDeadline = document.getElementById("set-deadline").value.trim();
+  s.evalStart = document.getElementById("set-start").value;
+  s.evalEnd = document.getElementById("set-end").value;
+  s.threshold = +document.getElementById("set-th").value || 20;
+  s.recordLen = +document.getElementById("set-len").value || 1000;
+  s.aCut = +document.getElementById("set-a").value || 85;
+  s.bCut = +document.getElementById("set-b").value || 70;
+  const ac = document.getElementById("set-admin").value.trim();
+  if (ac) S.evaluators.find(e => e.isAdmin).code = ac;
+  audit("설정 변경", "일반 설정"); save(); flash("설정을 저장했습니다."); render();
+};
+window.addAnchor = () => {
+  const title = document.getElementById("anchor-title").value.trim();
+  const summary = document.getElementById("anchor-summary").value.trim();
+  if (!title || !summary) { flash("제목과 요약을 입력하세요.", true); return; }
+  S.anchors.push({grade: document.getElementById("anchor-grade").value, title, summary});
+  audit("앵커 등록", title); save(); render();
+};
+window.delAnchor = i => { S.anchors.splice(i, 1); save(); render(); };
+window.saveRubric = () => {
+  if (!confirm("루브릭을 변경하면 기존 평가와의 정합성을 직접 확인해야 합니다. 저장할까요?")) return;
+  try {
+    const items = JSON.parse(document.getElementById("set-rubric").value);
+    if (!Array.isArray(items) || !items.length) throw new Error("배열이 아닙니다");
+    for (const it of items) if (it.no == null || !it.name || !it.max || !it.levels) throw new Error("no/name/max/levels 필수");
+    S.rubric = items;
+    audit("루브릭 변경"); save(); flash("루브릭을 저장했습니다."); render();
+  } catch (e) { flash("루브릭 JSON 형식 오류: " + e.message, true); }
+};
+window.savePrompts = () => {
+  S.prompts.eval = document.getElementById("set-p-eval").value;
+  S.prompts.record = document.getElementById("set-p-rec").value;
+  audit("프롬프트 수정"); save(); flash("프롬프트를 저장했습니다.");
+};
+window.resetAll = async () => {
+  if (!confirm("모든 데이터가 삭제되고 초기 시드 상태로 돌아갑니다. 계속할까요?")) return;
+  if (!confirm("정말 초기화할까요? 백업하지 않았다면 취소하세요.")) return;
+  for (const r of S.reports) await pdfDel(r.id);
+  S = defaultState(); save();
+  me = null; sessionStorage.removeItem("evalsys_login");
+  flash("초기화했습니다."); render();
+};
+
+/* ── 감사 로그 ── */
+function vAudit() {
+  return `<h1>감사 로그 (최근 500건)</h1>
+  <p><a onclick="go('settings')">← 설정</a></p>
+  <table class="list"><tr><th>시각</th><th>사용자</th><th>동작</th><th>상세</th></tr>
+  ${S.audit.slice(0, 500).map(l => `<tr><td class="nowrap">${l.ts}</td><td>${esc(l.actor)}</td>
+    <td>${esc(l.action)}</td><td class="muted">${esc(l.detail)}</td></tr>`).join("")}</table>`;
+}
+
+/* ════════════ 시작 ════════════ */
+load();
+const savedLogin = sessionStorage.getItem("evalsys_login");
+if (savedLogin) { try { me = JSON.parse(savedLogin); } catch(e) {} }
+render();
+</script>
+</body>
+</html>
